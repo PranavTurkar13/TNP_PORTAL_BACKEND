@@ -1,1 +1,1 @@
-{"root":["./src/client.ts","./src/index.ts","./src/controllers/studentcontroller.ts","./src/routes/adminroute.ts","./src/routes/studentroute.ts"],"version":"5.9.2"}
+{"root":["./src/client.ts","./src/index.ts","./src/controllers/student.controller.ts","./src/middleware/authmiddleware.ts","./src/routes/admin.routes.ts","./src/routes/student.routes.ts","./src/types/express.d.ts"],"version":"5.9.2"}
