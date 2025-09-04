@@ -12,6 +12,7 @@ model User {
   id          String    @id @default(uuid())
   email       String    @unique
   password    String
+  phoneNo     String
   role        Role      @default(STUDENT)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -33,8 +34,25 @@ model StudentProfile {
   firstName     String
   middleName    String?
   lastName      String
-  phone         String
   dob           DateTime?
+  skills        String[]   // list of skills
+
+  // Relations
+  user          User       @relation(fields: [userId], references: [id])
+  education     Education?
+  projects      Project[]
+  internships   Internship[]
+  certifications Certification[]
+  socials       SocialMediaProfile[]
+  applications  Application[]
+  achievements  Achievement[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Education {
+  id            String  @id @default(uuid())
+  studentId        String     @unique
   branch        String
   enrollmentYear Int
   passingYear   Int?
@@ -45,19 +63,10 @@ model StudentProfile {
   twelfthYear    Int?
   diplomaPercent Float?
   diplomaYear   Int?
-  backlogs      Int       // number of active backlogs
-  skills        String[]   // list of skills
+  backlogs      Int
 
-  // Relations
-  user          User       @relation(fields: [userId], references: [id])
-  projects      Project[]
-  internships   Internship[]
-  certifications Certification[]
-  socials       SocialMediaProfile[]
-  applications  Application[]
-  achievements  Achievement[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  student       StudentProfile       @relation(fields: [studentId], references: [id])
+
 }
 
 model Project {
