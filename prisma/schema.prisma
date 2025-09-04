@@ -12,6 +12,7 @@ model User {
   id        String   @id @default(uuid())
   email     String   @unique
   password  String
+  phoneNo   String
   role      Role     @default(STUDENT)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -33,7 +34,6 @@ model StudentProfile {
   firstName  String
   middleName String?
   lastName   String
-  phone      String
   dob        DateTime?
   skills     String[] // list of skills
 
@@ -63,12 +63,9 @@ model Education {
   twelfthYear    Int?
   diplomaPercent Float?
   diplomaYear    Int?
-  backlogs       Int // number of active backlogs
+  backlogs       Int
 
-  // Relations
-  student   StudentProfile @relation(fields: [studentId], references: [id])
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
+  student StudentProfile @relation(fields: [studentId], references: [id])
 }
 
 model Project {
