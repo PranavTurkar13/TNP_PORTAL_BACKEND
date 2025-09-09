@@ -10,9 +10,8 @@ datasource db {
 
 model User {
   id          String    @id @default(uuid())
+  auth0Id     String
   email       String    @unique
-  password    String
-  phoneNo     String
   role        Role      @default(STUDENT)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -34,6 +33,8 @@ model StudentProfile {
   firstName     String
   middleName    String?
   lastName      String
+  personalEmail String
+  phoneNo       Int
   dob           DateTime?
   skills        String[]   // list of skills
 

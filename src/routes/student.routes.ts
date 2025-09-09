@@ -1,10 +1,15 @@
 import  express from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { registerStudent } from "../controllers/student.controller.js";
 
 
 const studentRouter = express.Router();
 studentRouter.use(express.json());
+
+
+//student registration
+studentRouter.post("/registerStudent",registerStudent)
 
 //PROFILE ROUTES
 studentRouter.get("/profile",middleware,cont_func);
