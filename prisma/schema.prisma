@@ -12,8 +12,6 @@ model User {
   id          String    @id @default(uuid())
   auth0Id     String?
   email       String    @unique
-  password    String?
-  phoneNo     String?
   role        Role      @default(STUDENT)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt

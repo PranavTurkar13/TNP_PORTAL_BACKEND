@@ -6,7 +6,6 @@ export const registerStudent = async (req: Request, res: Response) => {
         const response = await db.user.create({
             data: {
                 email: student.email,
-                password: student.password,
                 phoneNo: student.phoneNo,
                 role: student.role || 'STUDENT',
                 student: {
