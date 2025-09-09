@@ -9,12 +9,12 @@ datasource db {
 }
 
 model User {
-  id          String    @id @default(uuid())
-  auth0Id     String?
-  email       String    @unique
-  role        Role      @default(STUDENT)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id        String   @id @default(uuid())
+  auth0Id   String
+  email     String   @unique
+  role      Role     @default(STUDENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relations
   student  StudentProfile?
@@ -28,15 +28,15 @@ enum Role {
 }
 
 model StudentProfile {
-  id            String     @id @default(uuid())
-  userId        String     @unique
+  id            String    @id @default(uuid())
+  userId        String    @unique
   firstName     String
   middleName    String?
   lastName      String
   personalEmail String?
   phoneNo       Int?
   dob           DateTime?
-  skills        String[]   // list of skills
+  skills        String[] // list of skills
 
   // Relations
   user           User                 @relation(fields: [userId], references: [id])
