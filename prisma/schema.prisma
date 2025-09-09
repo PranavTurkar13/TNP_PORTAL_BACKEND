@@ -10,15 +10,17 @@ datasource db {
 
 model User {
   id          String    @id @default(uuid())
-  auth0Id     String
+  auth0Id     String?
   email       String    @unique
+  password    String?
+  phoneNo     String?
   role        Role      @default(STUDENT)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
   // Relations
-  student     StudentProfile?
-  jobPosts    JobPost[]
+  student  StudentProfile?
+  jobPosts JobPost[]
 }
 
 enum Role {
@@ -33,41 +35,40 @@ model StudentProfile {
   firstName     String
   middleName    String?
   lastName      String
-  personalEmail String
-  phoneNo       Int
+  personalEmail String?
+  phoneNo       Int?
   dob           DateTime?
   skills        String[]   // list of skills
 
   // Relations
-  user          User       @relation(fields: [userId], references: [id])
-  education     Education?
-  projects      Project[]
-  internships   Internship[]
+  user           User                 @relation(fields: [userId], references: [id])
+  education      Education?
+  projects       Project[]
+  internships    Internship[]
   certifications Certification[]
-  socials       SocialMediaProfile[]
-  applications  Application[]
-  achievements  Achievement[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  socials        SocialMediaProfile[]
+  applications   Application[]
+  achievements   Achievement[]
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
 }
 
 model Education {
-  id            String  @id @default(uuid())
-  studentId        String     @unique
-  branch        String
+  id             String @id @default(uuid())
+  studentId      String @unique
+  branch         String
   enrollmentYear Int
-  passingYear   Int?
-  cgpa          Float
-  tenthPercent  Float?
-  tenthYear     Int?
+  passingYear    Int?
+  cgpa           Float
+  tenthPercent   Float?
+  tenthYear      Int?
   twelfthPercent Float?
   twelfthYear    Int?
   diplomaPercent Float?
-  diplomaYear   Int?
-  backlogs      Int
+  diplomaYear    Int?
+  backlogs       Int
 
-  student       StudentProfile       @relation(fields: [studentId], references: [id])
-
+  student StudentProfile @relation(fields: [studentId], references: [id])
 }
 
 model Project {
@@ -78,92 +79,91 @@ model Project {
   techStack   String[]
   link        String?
 
-  student     StudentProfile @relation(fields: [studentId], references: [id])
+  student StudentProfile @relation(fields: [studentId], references: [id])
 }
 
 model Internship {
-  id          String   @id @default(uuid())
+  id          String  @id @default(uuid())
   studentId   String
   company     String
   role        String
   duration    String
   description String?
 
-  student     StudentProfile @relation(fields: [studentId], references: [id])
+  student StudentProfile @relation(fields: [studentId], references: [id])
 }
 
 model Certification {
-  id           String   @id @default(uuid())
-  studentId    String
-  title        String
-  organization String
-  issueDate    DateTime?
-  expiryDate   DateTime?
-  credentialId String?
+  id            String    @id @default(uuid())
+  studentId     String
+  title         String
+  organization  String
+  issueDate     DateTime?
+  expiryDate    DateTime?
+  credentialId  String?
   credentialUrl String?
 
-  student      StudentProfile @relation(fields: [studentId], references: [id])
+  student StudentProfile @relation(fields: [studentId], references: [id])
 }
 
 model SocialMediaProfile {
-  id          String   @id @default(uuid())
-  studentId   String
-  platform    String   // e.g. LinkedIn, GitHub, Twitter
-  url         String
+  id        String @id @default(uuid())
+  studentId String
+  platform  String // e.g. LinkedIn, GitHub, Twitter
+  url       String
 
-  student     StudentProfile @relation(fields: [studentId], references: [id])
+  student StudentProfile @relation(fields: [studentId], references: [id])
 }
 
 model Achievement {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   studentId   String
-  title       String           // e.g. "Winner of Hackathon 2024"
-  description String?          // optional details
-  date        DateTime?        // when it was achieved
-  type        String?          // e.g. "Competition", "Award", "Scholarship"
+  title       String // e.g. "Winner of Hackathon 2024"
+  description String? // optional details
+  date        DateTime? // when it was achieved
+  type        String? // e.g. "Competition", "Award", "Scholarship"
 
-  student     StudentProfile @relation(fields: [studentId], references: [id])
+  student StudentProfile @relation(fields: [studentId], references: [id])
 }
-
 
 model JobPost {
   id          String   @id @default(uuid())
-  postedById  String   // TNP Officer (User ID)
-  role       String
+  postedById  String // TNP Officer (User ID)
+  role        String
   company     String
   companyInfo String?
   description String
   ctc         String?
   deadline    DateTime
 
-  postedBy    User       @relation(fields: [postedById], references: [id])
+  postedBy     User                 @relation(fields: [postedById], references: [id])
   applications Application[]
-  eligibility EligibilityCriteria?
+  eligibility  EligibilityCriteria?
 }
 
 model EligibilityCriteria {
-  id          String   @id @default(uuid())
-  jobPostId   String   @unique
-  minCGPA     Float?
-  allowedBranches String[]   // e.g. ["CSE", "IT", "ECE"]
-  maxBacklogs Int?          // e.g. 0 or 1
-  minTenth    Float?
-  minTwelfth  Float?
-  minDiploma  Float?
-  passingYear Int?
-  
-  jobPost     JobPost @relation(fields: [jobPostId], references: [id])
+  id              String   @id @default(uuid())
+  jobPostId       String   @unique
+  minCGPA         Float?
+  allowedBranches String[] // e.g. ["CSE", "IT", "ECE"]
+  maxBacklogs     Int? // e.g. 0 or 1
+  minTenth        Float?
+  minTwelfth      Float?
+  minDiploma      Float?
+  passingYear     Int?
+
+  jobPost JobPost @relation(fields: [jobPostId], references: [id])
 }
 
 model Application {
-  id          String   @id @default(uuid())
-  studentId   String
-  jobPostId   String
-  status      ApplicationStatus @default(PENDING)
-  appliedAt   DateTime @default(now())
+  id        String            @id @default(uuid())
+  studentId String
+  jobPostId String
+  status    ApplicationStatus @default(PENDING)
+  appliedAt DateTime          @default(now())
 
-  student     StudentProfile @relation(fields: [studentId], references: [id])
-  jobPost     JobPost        @relation(fields: [jobPostId], references: [id])
+  student StudentProfile @relation(fields: [studentId], references: [id])
+  jobPost JobPost        @relation(fields: [jobPostId], references: [id])
 }
 
 enum ApplicationStatus {
