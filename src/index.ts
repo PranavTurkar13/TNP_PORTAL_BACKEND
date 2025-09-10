@@ -1,7 +1,8 @@
 import express from "express";
 const app = express();
-import { auth } from "express-openid-connect";
+import { auth, requiresAuth } from "express-openid-connect";
 import "dotenv/config";
+import db from "./client.js";
 
 import studentRouter from "./routes/student.routes.js";
 import adminRouter from "./routes/admin.routes.js";
@@ -31,10 +32,28 @@ app.use("/api/v1/student", studentRouter);
 app.use("/api/v1/admin", adminRouter);
 
 app.get("/", (req, res) => {
-  res.send(req.oidc?.isAuthenticated() ? "✅ Logged in" : "❌ Logged out");
+  if (req.oidc?.isAuthenticated()) {
+    return res.redirect("/profile");
+  }
+  res.send("❌ Logged out");
 });
-app.get("/profile", (req, res) => {
-  res.json(req.oidc?.user || {});
+
+app.get("/profile", requiresAuth(), async (req, res) => {
+  try {
+    const user = req.oidc?.user!;
+
+    const dbUser = await db.user.findUnique({
+      where: { auth0Id: user.sub },
+    });
+
+    if (!dbUser) {
+      return res.status(404).json({ message: "User not found in DB" });
+    }
+
+    res.json(dbUser);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.listen(3000, () => {
