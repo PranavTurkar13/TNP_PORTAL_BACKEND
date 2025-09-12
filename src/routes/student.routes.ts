@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import {
   registerStudentProfile,
-  getStudentProfile,
   userRegister,
 } from "../controllers/student.controller.js";
 
@@ -13,7 +12,7 @@ studentRouter.use(express.json());
 //User registration
 studentRouter.post("/registerUser", userRegister);
 
-// //student registration
+//student registration
 studentRouter.post("/registerStudent", registerStudentProfile);
 
 // //PROFILE ROUTES
