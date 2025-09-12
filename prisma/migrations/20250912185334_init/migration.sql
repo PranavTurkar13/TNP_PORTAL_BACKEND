@@ -7,8 +7,8 @@ CREATE TYPE "public"."ApplicationStatus" AS ENUM ('PENDING', 'SHORTLISTED', 'SEL
 -- CreateTable
 CREATE TABLE "public"."User" (
     "id" TEXT NOT NULL,
+    "auth0Id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
     "role" "public"."Role" NOT NULL DEFAULT 'STUDENT',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -23,8 +23,20 @@ CREATE TABLE "public"."StudentProfile" (
     "firstName" TEXT NOT NULL,
     "middleName" TEXT,
     "lastName" TEXT NOT NULL,
-    "phone" TEXT NOT NULL,
+    "personalEmail" TEXT,
+    "phoneNo" BIGINT,
     "dob" TIMESTAMP(3),
+    "skills" TEXT[],
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "StudentProfile_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."Education" (
+    "id" TEXT NOT NULL,
+    "studentId" TEXT NOT NULL,
     "branch" TEXT NOT NULL,
     "enrollmentYear" INTEGER NOT NULL,
     "passingYear" INTEGER,
@@ -36,11 +48,8 @@ CREATE TABLE "public"."StudentProfile" (
     "diplomaPercent" DOUBLE PRECISION,
     "diplomaYear" INTEGER,
     "backlogs" INTEGER NOT NULL,
-    "skills" TEXT[],
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "StudentProfile_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Education_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -144,16 +153,25 @@ CREATE TABLE "public"."Application" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "User_auth0Id_key" ON "public"."User"("auth0Id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "public"."User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "StudentProfile_userId_key" ON "public"."StudentProfile"("userId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Education_studentId_key" ON "public"."Education"("studentId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "EligibilityCriteria_jobPostId_key" ON "public"."EligibilityCriteria"("jobPostId");
 
 -- AddForeignKey
 ALTER TABLE "public"."StudentProfile" ADD CONSTRAINT "StudentProfile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."Education" ADD CONSTRAINT "Education_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "public"."StudentProfile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."Project" ADD CONSTRAINT "Project_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "public"."StudentProfile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

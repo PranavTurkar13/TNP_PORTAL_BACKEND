@@ -34,7 +34,7 @@ model StudentProfile {
   middleName    String?
   lastName      String
   personalEmail String?
-  phoneNo       Int?
+  phoneNo       BigInt?
   dob           DateTime?
   skills        String[] // list of skills
 

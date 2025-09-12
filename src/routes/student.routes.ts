@@ -2,7 +2,7 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import {
-  registerStudent,
+  registerStudentProfile,
   getStudentProfile,
   userRegister,
 } from "../controllers/student.controller.js";
@@ -14,7 +14,7 @@ studentRouter.use(express.json());
 studentRouter.post("/registerUser", userRegister);
 
 // //student registration
-// studentRouter.post("/registerStudent", registerStudent);
+studentRouter.post("/registerStudent", registerStudentProfile);
 
 // //PROFILE ROUTES
 // studentRouter.get("/profile", middleware, getStudentProfile);

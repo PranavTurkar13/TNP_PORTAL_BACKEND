@@ -42,10 +42,10 @@ app.get("/", (req, res) => {
 
 app.get("/profile", requiresAuth(), async (req, res) => {
   try {
-    const user = req.oidc?.user!;
+    const user = req.oidc?.user!.sub;
 
     const dbUser = await db.user.findUnique({
-      where: { auth0Id: user.sub },
+      where: { auth0Id: user },
     });
 
     if (!dbUser) {
