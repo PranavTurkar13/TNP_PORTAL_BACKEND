@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import db from "../client.js";
 
+//USER REGISTERATION
 export const userRegister = async (req: Request, res: Response) => {
   try {
     const { email, auth0Id } = req.body;
@@ -27,7 +28,8 @@ export const userRegister = async (req: Request, res: Response) => {
   }
 };
 
-export const registerStudent = async (req: Request, res: Response) => {
+//STUDENT PROFILE REGISTRATION
+export const registerStudentProfile = async (req: Request, res: Response) => {
   try {
     const student = req.body;
     const response = await db.user.create({
