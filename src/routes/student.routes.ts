@@ -1,9 +1,10 @@
 import express from "express";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
+import { requiresAuth } from "express-openid-connect";
 import {
   registerStudentProfile,
   userRegister,
+  getStudentProfile,
+  updateStudentProfile,
 } from "../controllers/student.controller.js";
 
 const studentRouter = express.Router();
@@ -12,13 +13,10 @@ studentRouter.use(express.json());
 //User registration
 studentRouter.post("/registerUser", userRegister);
 
-//student registration
-studentRouter.post("/registerStudent", registerStudentProfile);
-
-// //PROFILE ROUTES
-// studentRouter.get("/profile", middleware, getStudentProfile);
-// studentRouter.post("/profile", middleware, cont_func);
-// studentRouter.put("/profile", middleware, cont_func);
+// STUDENT PROFILE REGISTRATION ROUTES
+studentRouter.get("/profile", requiresAuth(), getStudentProfile);
+studentRouter.post("/registerStudent", requiresAuth(), registerStudentProfile);
+studentRouter.put("/profile", requiresAuth(), updateStudentProfile);
 
 // //ACHIEVEMENT ROUTES
 // studentRouter.get("/profile/achievement", middleware, cont_func);

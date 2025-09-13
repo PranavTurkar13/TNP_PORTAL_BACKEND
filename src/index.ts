@@ -23,7 +23,7 @@ const config = {
   authRequired: false,
   auth0Logout: true,
   secret: process.env.AUTH0_SECRET, // store in .env
-  baseURL: process.env.BASE_URL,
+  baseURL: process.env.BASE_URL || "http://localhost:3000",
   clientID: process.env.AUTH0_CLIENT_ID,
   issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}`,
 };
@@ -61,4 +61,3 @@ app.get("/profile", requiresAuth(), async (req, res) => {
 app.listen(3000, () => {
   console.log("Server running at local host 3000");
 });
-//
