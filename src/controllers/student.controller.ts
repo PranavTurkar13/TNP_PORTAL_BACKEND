@@ -48,7 +48,7 @@ export const registerStudentProfile = async (req: Request, res: Response) => {
     }
 
     // Get the logged-in user's Auth0 ID
-    const auth0Id = "google-oauth2|103157320280067089106";
+    const auth0Id = "";
     console.log(auth0Id);
     if (!auth0Id) {
       return res
