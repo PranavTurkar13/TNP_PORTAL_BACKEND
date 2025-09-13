@@ -1,5 +1,6 @@
 import express from "express";
-import { requiresAuth } from "express-openid-connect";
+import pkg from "express-openid-connect";
+const { requiresAuth } = pkg;
 import {
   registerStudentProfile,
   userRegister,
