@@ -7,6 +7,8 @@ import {
   getStudentProfile,
   updateStudentProfile,
   addEducationDetails,
+  getEducationDetails,
+  updateEducationDetails,
 } from "../controllers/student.controller.js";
 
 const studentRouter = express.Router();
@@ -21,9 +23,9 @@ studentRouter.post("/registerStudent", requiresAuth(), registerStudentProfile);
 studentRouter.put("/profile", requiresAuth(), updateStudentProfile);
 
 // Education routes
-// studentRouter.get("/education", requiresAuth(), getEducationDetails);
+studentRouter.get("/education", requiresAuth(), getEducationDetails);
 studentRouter.post("/education", requiresAuth(), addEducationDetails);
-// studentRouter.put("/education", requiresAuth(), updateEducationDetails);
+studentRouter.put("/education", requiresAuth(), updateEducationDetails);
 // studentRouter.delete("/education/:id", requiresAuth(), deleteEducationDetails);
 
 // //ACHIEVEMENT ROUTES
