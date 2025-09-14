@@ -1,10 +1,12 @@
 import express from "express";
-import { requiresAuth } from "express-openid-connect";
+import pkg from "express-openid-connect";
+const { requiresAuth } = pkg;
 import {
   registerStudentProfile,
   userRegister,
   getStudentProfile,
   updateStudentProfile,
+  addEducationDetails,
 } from "../controllers/student.controller.js";
 
 const studentRouter = express.Router();
@@ -17,6 +19,12 @@ studentRouter.post("/registerUser", userRegister);
 studentRouter.get("/profile", requiresAuth(), getStudentProfile);
 studentRouter.post("/registerStudent", requiresAuth(), registerStudentProfile);
 studentRouter.put("/profile", requiresAuth(), updateStudentProfile);
+
+// Education routes
+// studentRouter.get("/education", requiresAuth(), getEducationDetails);
+studentRouter.post("/education", requiresAuth(), addEducationDetails);
+// studentRouter.put("/education", requiresAuth(), updateEducationDetails);
+// studentRouter.delete("/education/:id", requiresAuth(), deleteEducationDetails);
 
 // //ACHIEVEMENT ROUTES
 // studentRouter.get("/profile/achievement", middleware, cont_func);

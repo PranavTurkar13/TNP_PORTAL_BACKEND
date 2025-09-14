@@ -191,3 +191,91 @@ export const updateStudentProfile = async (req: Request, res: Response) => {
       .json({ error: error.message || "Internal server error" });
   }
 };
+
+
+// ADD EDUCATION DETAILS CONTROLLER
+export const addEducationDetails = async (req: Request, res: Response) => {
+  try {
+    const {
+      branch,
+      enrollmentYear,
+      passingYear,
+      cgpa,
+      tenthPercent,
+      tenthYear,
+      twelfthPercent,
+      twelfthYear,
+      diplomaPercent,
+      diplomaYear,
+      backlogs,
+    } = req.body;
+
+    // Validate required fields
+    if (!branch || !enrollmentYear || cgpa === undefined || backlogs === undefined) {
+      return res.status(400).json({
+        error: "branch, enrollmentYear, cgpa, and backlogs are required fields",
+      });
+    }
+
+    // Get Auth0 user id from token
+    // const auth0Id = req.oidc?.user?.sub;
+    const auth0Id = "";
+    console.log(auth0Id);
+    if (!auth0Id) {
+      return res
+        .status(401)
+        .json({ error: "Unauthorized: user not logged in" });
+    }
+
+    // Find user in database
+    const user = await db.user.findUnique({ where: { auth0Id } });
+    if (!user) {
+      return res.status(404).json({ error: "User not found in database" });
+    }
+
+    // Find student profile
+    const profile = await db.studentProfile.findUnique({
+      where: { userId: user.id },
+    });
+
+    if (!profile) {
+      return res.status(404).json({ error: "Student profile not found" });
+    }
+
+    // Check if education details already exist
+    const existingEducation = await db.education.findUnique({
+      where: { studentId: profile.id },
+    });
+
+    if (existingEducation) {
+      return res.status(409).json({ error: "Education details already exist" });
+    }
+
+    // Create education details
+    const education = await db.education.create({
+      data: {
+        studentId: profile.id,
+        branch,
+        enrollmentYear: Number(enrollmentYear),
+        passingYear: passingYear ? Number(passingYear) : null,
+        cgpa: Number(cgpa),
+        tenthPercent: tenthPercent ? Number(tenthPercent) : null,
+        tenthYear: tenthYear ? Number(tenthYear) : null,
+        twelfthPercent: twelfthPercent ? Number(twelfthPercent) : null,
+        twelfthYear: twelfthYear ? Number(twelfthYear) : null,
+        diplomaPercent: diplomaPercent ? Number(diplomaPercent) : null,
+        diplomaYear: diplomaYear ? Number(diplomaYear) : null,
+        backlogs: Number(backlogs),
+      },
+    });
+
+    return res.status(201).json({
+      message: "Education details added successfully",
+      education,
+    });
+  } catch (error: any) {
+    return res
+      .status(500)
+      .json({ error: error.message || "Internal server error" });
+  }
+};
