@@ -9,6 +9,11 @@ import {
   addEducationDetails,
   getEducationDetails,
   updateEducationDetails,
+  deleteEducationDetails,
+  getAchievementDetails,
+  addAchievementDetails,
+  updateAchievementDetails,
+  deleteAchievementDetails,
 } from "../controllers/student.controller.js";
 
 const studentRouter = express.Router();
@@ -26,17 +31,21 @@ studentRouter.put("/profile", requiresAuth(), updateStudentProfile);
 studentRouter.get("/education", requiresAuth(), getEducationDetails);
 studentRouter.post("/education", requiresAuth(), addEducationDetails);
 studentRouter.put("/education", requiresAuth(), updateEducationDetails);
-// studentRouter.delete("/education/:id", requiresAuth(), deleteEducationDetails);
+studentRouter.delete("/education", requiresAuth(), deleteEducationDetails);
 
-// //ACHIEVEMENT ROUTES
-// studentRouter.get("/profile/achievement", middleware, cont_func);
-// studentRouter.post("/profile/achievement", middleware, cont_func);
-// studentRouter.put("/profile/achievement/:achievementID", middleware, cont_func);
-// studentRouter.delete(
-//   "profile/achievement/:achievementID",
-//   middleware,
-//   cont_func
-// );
+//ACHIEVEMENT ROUTES
+studentRouter.get("/achievement", requiresAuth(), getAchievementDetails);
+studentRouter.post("/achievement", requiresAuth(), addAchievementDetails);
+studentRouter.put(
+  "/achievement/:achievementID",
+  requiresAuth(),
+  updateAchievementDetails
+);
+studentRouter.delete(
+  "/achievement/:achievementID",
+  requiresAuth(),
+  deleteAchievementDetails
+);
 
 // //PROJECT ROUTES
 // studentRouter.get("/profile/project", middleware, cont_func);
