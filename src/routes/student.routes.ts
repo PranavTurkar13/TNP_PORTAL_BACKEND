@@ -14,6 +14,10 @@ import {
   addAchievementDetails,
   updateAchievementDetails,
   deleteAchievementDetails,
+  addProjectDetails,
+  updateProjectDetails,
+  getProjectDetails,
+  deleteProjectDetails,
 } from "../controllers/student.controller.js";
 
 const studentRouter = express.Router();
@@ -25,19 +29,19 @@ studentRouter.post("/registerUser", userRegister);
 // STUDENT PROFILE REGISTRATION ROUTES
 studentRouter.get("/profile", requiresAuth(), getStudentProfile);
 studentRouter.post("/registerStudent", requiresAuth(), registerStudentProfile);
-studentRouter.put("/profile", requiresAuth(), updateStudentProfile);
+studentRouter.put("/editProfile", requiresAuth(), updateStudentProfile);
 
 // Education routes
 studentRouter.get("/education", requiresAuth(), getEducationDetails);
-studentRouter.post("/education", requiresAuth(), addEducationDetails);
-studentRouter.put("/education", requiresAuth(), updateEducationDetails);
+studentRouter.post("/addEducation", requiresAuth(), addEducationDetails);
+studentRouter.put("/editEducation", requiresAuth(), updateEducationDetails);
 studentRouter.delete("/education", requiresAuth(), deleteEducationDetails);
 
 //ACHIEVEMENT ROUTES
 studentRouter.get("/achievement", requiresAuth(), getAchievementDetails);
-studentRouter.post("/achievement", requiresAuth(), addAchievementDetails);
+studentRouter.post("/addAchievement", requiresAuth(), addAchievementDetails);
 studentRouter.put(
-  "/achievement/:achievementID",
+  "/editAchievement/:achievementID",
   requiresAuth(),
   updateAchievementDetails
 );
@@ -48,10 +52,18 @@ studentRouter.delete(
 );
 
 // //PROJECT ROUTES
-// studentRouter.get("/profile/project", middleware, cont_func);
-// studentRouter.post("/profile/project", middleware, cont_func);
-// studentRouter.put("/profile/project/:projectID", middleware, cont_func);
-// studentRouter.delete("profile/project/:projectID", middleware, cont_func);
+studentRouter.get("/project", requiresAuth(), getProjectDetails);
+studentRouter.post("/addProject", requiresAuth(), addProjectDetails);
+studentRouter.put(
+  "/editProject/:projectID",
+  requiresAuth(),
+  updateProjectDetails
+);
+studentRouter.delete(
+  "/project/:projectID",
+  requiresAuth(),
+  deleteProjectDetails
+);
 
 // //INTERNSHIP ROUTES
 // studentRouter.get("/profile/internship", middleware, cont_func);
