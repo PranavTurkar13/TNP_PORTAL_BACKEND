@@ -22,6 +22,10 @@ import {
   getInternshipDetails,
   updateInternshipDetails,
   deleteInternshipDetails,
+  addSocialsDetails,
+  getSocialsDetails,
+  updateSocialsDetails,
+  deleteSocialsDetails,
 } from "../controllers/student.controller.js";
 
 const studentRouter = express.Router();
@@ -94,10 +98,14 @@ studentRouter.delete(
 // );
 
 // //SOCIAL ROUTES
-// studentRouter.get("/profile/social", middleware, cont_func);
-// studentRouter.post("/profile/social", middleware, cont_func);
-// studentRouter.put("/profile/social/:socialID", middleware, cont_func);
-// studentRouter.delete("profile/social/:socialID", middleware, cont_func);
+studentRouter.get("/social", requiresAuth(), getSocialsDetails);
+studentRouter.post("/addSocial", requiresAuth(), addSocialsDetails);
+studentRouter.put("/social/:socialsID", requiresAuth(), updateSocialsDetails);
+studentRouter.delete(
+  "/social/:socialsID",
+  requiresAuth(),
+  deleteSocialsDetails
+);
 
 // //APPLICATION ROUTE
 // studentRouter.get("profile/applications", middleware, cont_func);
