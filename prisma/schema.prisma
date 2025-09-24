@@ -85,7 +85,7 @@ model Internship {
   studentId   String
   company     String
   role        String
-  duration    String
+  duration    Int // e.g. "3 months", "6 weeks"
   description String?
 
   student StudentProfile @relation(fields: [studentId], references: [id])

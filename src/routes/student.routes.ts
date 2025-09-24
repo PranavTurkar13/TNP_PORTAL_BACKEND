@@ -18,6 +18,10 @@ import {
   updateProjectDetails,
   getProjectDetails,
   deleteProjectDetails,
+  addInternshipDetails,
+  getInternshipDetails,
+  updateInternshipDetails,
+  deleteInternshipDetails,
 } from "../controllers/student.controller.js";
 
 const studentRouter = express.Router();
@@ -66,10 +70,18 @@ studentRouter.delete(
 );
 
 // //INTERNSHIP ROUTES
-// studentRouter.get("/profile/internship", middleware, cont_func);
-// studentRouter.post("/profile/internship", middleware, cont_func);
-// studentRouter.put("/profile/internship/:internshipID", middleware, cont_func);
-// studentRouter.delete("profile/internship/:internshipID", middleware, cont_func);
+studentRouter.get("/internship", requiresAuth(), getInternshipDetails);
+studentRouter.post("/addInternship", requiresAuth(), addInternshipDetails);
+studentRouter.put(
+  "/internship/:internshipID",
+  requiresAuth(),
+  updateInternshipDetails
+);
+studentRouter.delete(
+  "/internship/:internshipID",
+  requiresAuth(),
+  deleteInternshipDetails
+);
 
 // //Certificate Routes
 // studentRouter.get("/profile/certificate", middleware, cont_func);
