@@ -907,3 +907,22 @@ export const deleteProjectDetails = async (req: Request, res: Response) => {
       .json({ error: error.message || "Internal server error" });
   }
 };
+
+
+//get certificate details
+const getCertificateDetails = async(req:Request,res:Response)=>{
+  try {
+    const { company, role, duration, description } = req.body;
+
+    // Get Auth0 user id from token
+    const auth0Id = req.oidc?.user?.sub;
+    console.log(auth0Id);
+    if (!auth0Id) {
+      return res
+        .status(401)
+        .json({ error: "Unauthorized: user not logged in" });
+    }
+  } catch (error) {
+    
+  }
+};
