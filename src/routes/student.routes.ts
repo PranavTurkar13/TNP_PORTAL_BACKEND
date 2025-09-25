@@ -1,32 +1,49 @@
 import express from "express";
 import pkg from "express-openid-connect";
 const { requiresAuth } = pkg;
+//User Controller
+import { userRegister } from "../controllers/studentControllers/user.controller.js";
+//Profile Controller
 import {
-  registerStudentProfile,
-  userRegister,
   getStudentProfile,
+  registerStudentProfile,
   updateStudentProfile,
+} from "../controllers/studentControllers/profile.controller.js";
+//Education Controller
+import {
   addEducationDetails,
   getEducationDetails,
   updateEducationDetails,
   deleteEducationDetails,
-  getAchievementDetails,
+} from "../controllers/studentControllers/education.controller.js";
+//Achievement Controller
+import {
   addAchievementDetails,
+  getAchievementDetails,
   updateAchievementDetails,
   deleteAchievementDetails,
+} from "../controllers/studentControllers/achievement.controller.js";
+//Project Controller
+import {
   addProjectDetails,
-  updateProjectDetails,
   getProjectDetails,
+  updateProjectDetails,
   deleteProjectDetails,
+} from "../controllers/studentControllers/project.controller.js";
+//Internship Controller
+import {
   addInternshipDetails,
   getInternshipDetails,
   updateInternshipDetails,
   deleteInternshipDetails,
+} from "../controllers/studentControllers/internship.controller.js";
+//Social Controller
+import {
   addSocialsDetails,
   getSocialsDetails,
   updateSocialsDetails,
   deleteSocialsDetails,
-} from "../controllers/student.controller.js";
+} from "../controllers/studentControllers/social.controller.js";
 
 const studentRouter = express.Router();
 studentRouter.use(express.json());
