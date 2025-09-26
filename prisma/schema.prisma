@@ -34,7 +34,7 @@ model StudentProfile {
   middleName    String?
   lastName      String
   personalEmail String?
-  phoneNo       BigInt?
+  phoneNo       String?
   dob           DateTime?
   skills        String[] // list of skills
 
@@ -85,7 +85,7 @@ model Internship {
   studentId   String
   company     String
   role        String
-  duration    Int // e.g. "3 months", "6 weeks"
+  duration    String // e.g. "3 months", "6 weeks"
   description String?
 
   student StudentProfile @relation(fields: [studentId], references: [id])
