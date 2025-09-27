@@ -14,8 +14,7 @@ app.use(express.json());
 if (
   !process.env.AUTH0_SECRET ||
   !process.env.AUTH0_CLIENT_ID ||
-  !process.env.AUTH0_DOMAIN ||
-  !process.env.BASE_URL
+  !process.env.AUTH0_DOMAIN
 ) {
   throw new Error("Missing Auth0 environment variables. Please check .env");
 }
