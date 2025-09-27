@@ -44,7 +44,13 @@ import {
   updateSocialsDetails,
   deleteSocialsDetails,
 } from "../controllers/studentControllers/social.controller.js";
-
+//Certificate Controller
+import {
+  addCertificateDetails,
+  getCertificateDetails,
+  updatecertificateDetails,
+  deletecertificateDetails,
+} from "../controllers/studentControllers/certificate.controller.js";
 const studentRouter = express.Router();
 studentRouter.use(express.json());
 
@@ -105,14 +111,14 @@ studentRouter.delete(
 );
 
 // //Certificate Routes
-// studentRouter.get("/profile/certificate", middleware, cont_func);
-// studentRouter.post("/profile/certificate", middleware, cont_func);
-// studentRouter.put("/profile/certificate/:certificateID", middleware, cont_func);
-// studentRouter.delete(
-//   "profile/certificate/:certificate:ID",
-//   middleware,
-//   cont_func
-// );
+studentRouter.get("/certificate", requiresAuth(), getCertificateDetails);
+studentRouter.post("/addcertificate", requiresAuth(), addCertificateDetails);
+studentRouter.put("/certificate/:certificateID", requiresAuth(), updatecertificateDetails);
+studentRouter.delete(
+  "/certificate/:certificate:ID",
+  requiresAuth(),
+  deletecertificateDetails
+);
 
 // //SOCIAL ROUTES
 studentRouter.get("/social", requiresAuth(), getSocialsDetails);
