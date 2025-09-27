@@ -35,7 +35,7 @@ app.use("/api/v1/admin", adminRouter);
 
 app.get("/", (req, res) => {
   if (req.oidc?.isAuthenticated()) {
-    return res.redirect("/profile");
+    return res.redirect("https://tnp-frontend-gold.vercel.app/success");
   }
   res.send("❌ Logged out");
 });
@@ -56,6 +56,10 @@ app.get("/profile", requiresAuth(), async (req, res) => {
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
+});
+
+app.get("/access-denied", (req, res) => {
+  res.send("Access Denied");
 });
 
 app.listen(3000, () => {

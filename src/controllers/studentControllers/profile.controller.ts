@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import db from "../../client.js";
+import { isValidPhone, isValidEmail } from "../../utils/validators.js";
 
 // // PROFILE CONTROLLERS
 //STUDENT PROFILE POST ON REGISTRATION
@@ -19,6 +20,12 @@ export const registerStudentProfile = async (req: Request, res: Response) => {
       return res
         .status(400)
         .json({ error: "firstName and lastName are required" });
+    }
+    if (phoneNo && !isValidPhone(phoneNo)) {
+      return res.status(400).json({ error: "Invalid phone number format" });
+    }
+    if (personalEmail && !isValidEmail(personalEmail)) {
+      return res.status(400).json({ error: "Invalid email format" });
     }
 
     // Get the logged-in user's Auth0 ID
@@ -137,6 +144,14 @@ export const updateStudentProfile = async (req: Request, res: Response) => {
 
     if (!profile) {
       return res.status(404).json({ error: "Student profile not found" });
+    }
+
+    //Validation
+    if (phoneNo && !isValidPhone(phoneNo)) {
+      return res.status(400).json({ error: "Invalid phone number format" });
+    }
+    if (personalEmail && !isValidEmail(personalEmail)) {
+      return res.status(400).json({ error: "Invalid email format" });
     }
 
     // Update profile
