@@ -35,7 +35,7 @@ app.use("/api/v1/admin", adminRouter);
 
 app.get("/", (req, res) => {
   if (req.oidc?.isAuthenticated()) {
-    return res.redirect("https://3ff2cc077cec.ngrok-free.app/success");
+    return res.redirect("https://tnp-frontend-gold.vercel.app/success");
   }
   res.send("❌ Logged out");
 });
