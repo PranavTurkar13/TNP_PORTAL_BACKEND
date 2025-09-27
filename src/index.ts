@@ -23,7 +23,7 @@ const config = {
   authRequired: false,
   auth0Logout: true,
   secret: process.env.AUTH0_SECRET, // store in .env
-  baseURL: process.env.BASE_URL,
+  // baseURL: process.env.BASE_URL,
   clientID: process.env.AUTH0_CLIENT_ID,
   issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}`,
 };
@@ -35,7 +35,7 @@ app.use("/api/v1/admin", adminRouter);
 
 app.get("/", (req, res) => {
   if (req.oidc?.isAuthenticated()) {
-    return res.redirect("/profile");
+    return res.redirect("https://3ff2cc077cec.ngrok-free.app/success");
   }
   res.send("❌ Logged out");
 });
@@ -56,6 +56,10 @@ app.get("/profile", requiresAuth(), async (req, res) => {
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }
+});
+
+app.get("/access-denied", (req, res) => {
+  res.send("Access Denied");
 });
 
 app.listen(3000, () => {
