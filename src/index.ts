@@ -8,7 +8,11 @@ import cors from "cors";
 
 app.use(
   cors({
-    origin: ["https://tnp-frontend-gold.vercel.app", process.env.AUTH0_DOMAIN!],
+    origin: [
+      "https://tnp-frontend-gold.vercel.app",
+      process.env.AUTH0_DOMAIN!,
+      "https://dev-1psrprtos7q8dhp6.us.auth0.com",
+    ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
