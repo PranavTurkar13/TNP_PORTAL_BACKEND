@@ -12,12 +12,17 @@ const allowedOrigins = [
   "http://localhost:3001",
 ];
 
-app.use(
+app.use((req, res, next) => {
+  // Skip CORS for Auth0 callback
+  if (req.path.startsWith("/callback")) return next();
+
   cors({
     origin: function (origin, callback) {
+      // Allow requests with no origin (server-to-server requests)
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
+        console.warn("Blocked by CORS:", origin);
         callback(new Error("Not allowed by CORS"));
       }
     },
@@ -33,8 +38,8 @@ app.use(
       "Access-Control-Request-Headers",
     ],
     exposedHeaders: ["Set-Cookie"],
-  })
-);
+  })(req, res, next);
+});
 
 import studentRouter from "./routes/student.routes.js";
 import adminRouter from "./routes/admin.routes.js";
@@ -93,7 +98,7 @@ app.get("/access-denied", (req, res) => {
   res.send("Access Denied");
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
