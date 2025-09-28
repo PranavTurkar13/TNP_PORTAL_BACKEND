@@ -4,6 +4,14 @@ import pkg from "express-openid-connect";
 const { auth, requiresAuth } = pkg;
 import "dotenv/config";
 import db from "./client.js";
+import cors from "cors";
+
+app.use(
+  cors({
+    origin: "https://tnp-frontend-gold.vercel.app",
+    credentials: true,
+  })
+);
 
 import studentRouter from "./routes/student.routes.js";
 import adminRouter from "./routes/admin.routes.js";
