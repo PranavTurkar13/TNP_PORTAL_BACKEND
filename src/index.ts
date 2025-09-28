@@ -8,7 +8,7 @@ import cors from "cors";
 
 app.use(
   cors({
-    origin: "https://tnp-frontend-gold.vercel.app",
+    origin: /https:\/\/.*\.vercel\.app$/,
     credentials: true,
   })
 );
