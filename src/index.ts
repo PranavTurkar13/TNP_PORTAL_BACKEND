@@ -6,13 +6,20 @@ import "dotenv/config";
 import db from "./client.js";
 import cors from "cors";
 
+const allowedOrigins = [
+  "https://tnp-frontend-gold.vercel.app",
+  "http://localhost:3000",
+  "http://localhost:3001",
+];
 app.use(
   cors({
-    origin: [
-      "https://tnp-frontend-gold.vercel.app",
-      "http://localhost:3000", // for local development
-      "http://localhost:3001", // for local development
-    ],
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowedHeaders: [
@@ -25,12 +32,17 @@ app.use(
       "Access-Control-Request-Headers",
     ],
     exposedHeaders: ["Set-Cookie"],
-    preflightContinue: false,
-    optionsSuccessStatus: 200,
   })
 );
+
 // Handle preflight requests explicitly
-app.options("*", cors());
+app.options(
+  "*",
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
 
 import studentRouter from "./routes/student.routes.js";
 import adminRouter from "./routes/admin.routes.js";
