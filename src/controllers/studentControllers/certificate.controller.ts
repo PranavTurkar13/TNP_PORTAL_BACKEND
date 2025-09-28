@@ -31,7 +31,7 @@ export const addCertificateDetails = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Student profile not found" });
     }
 
-    const certificate = await db.certificate.create({
+    const certificate = await db.Certification.create({
       data: {
         studentId: profile.id,
         title,
@@ -83,7 +83,7 @@ export const getCertificateDetails = async (req: Request, res: Response) => {
     }
 
     // Find certificate details
-    const certificate = await db.certificate.findMany({
+    const certificate = await db.Certification.findMany({
       where: { studentId: profile.id },
     });
 
@@ -132,7 +132,7 @@ export const updatecertificateDetails = async (req: Request, res: Response) => {
     }
 
     // Checking if certificate belongs to this student
-    const certificate = await db.certificate.findUnique({
+    const certificate = await db.Certification.findUnique({
       where: { id: certificateID },
     });
 
@@ -141,7 +141,7 @@ export const updatecertificateDetails = async (req: Request, res: Response) => {
     }
 
     // Update certificate
-    const updatedcertificate = await db.certificate.update({
+    const updatedcertificate = await db.Certification.update({
       where: { id: certificateID },
       data: {
         title: title ?? certificate.title,
@@ -195,7 +195,7 @@ export const deletecertificateDetails = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Student profile not found" });
     }
     // Check if certificate belongs to this student
-    const certificate = await db.certificate.findUnique({
+    const certificate = await db.Certification.findUnique({
       where: { id: certificateID },
     });
 
@@ -204,7 +204,7 @@ export const deletecertificateDetails = async (req: Request, res: Response) => {
     }
 
     // Delete certificate
-    await db.certificate.delete({ where: { id: certificateID } });
+    await db.Certification.delete({ where: { id: certificateID } });
 
     return res.status(200).json({ message: "certificate deleted successfully" });
   } catch (error: any) {

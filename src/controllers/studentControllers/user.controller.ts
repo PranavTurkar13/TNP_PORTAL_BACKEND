@@ -15,7 +15,8 @@ export const userRegister = async (req: Request, res: Response) => {
         .status(200)
         .json({ message: "User already exists", user: existingUser });
     }
-
+    
+    
     const newUser = await db.user.create({
       data: { email, auth0Id },
     });
