@@ -89,6 +89,7 @@ app.get("/access-denied", (req, res) => {
   res.send("Access Denied");
 });
 
-app.listen(3000, () => {
-  console.log("Server running at local host 3000");
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 });
