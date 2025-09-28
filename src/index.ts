@@ -11,6 +11,7 @@ const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
 ];
+
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -32,15 +33,6 @@ app.use(
       "Access-Control-Request-Headers",
     ],
     exposedHeaders: ["Set-Cookie"],
-  })
-);
-
-// Handle preflight requests explicitly
-app.options(
-  "*",
-  cors({
-    origin: allowedOrigins,
-    credentials: true,
   })
 );
 
