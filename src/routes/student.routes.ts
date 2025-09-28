@@ -114,7 +114,7 @@ studentRouter.delete(
 // studentRouter.post("/profile/certificate", middleware, cont_func);
 // studentRouter.put("/profile/certificate/:certificateID", middleware, cont_func);
 // studentRouter.delete(
-//   "profile/certificate/:certificate:ID",
+//   "profile/certificate/:certificateID",
 //   middleware,
 //   cont_func
 // );
