@@ -10,14 +10,27 @@ app.use(
   cors({
     origin: [
       "https://tnp-frontend-gold.vercel.app",
-      process.env.AUTH0_DOMAIN!,
-      "https://dev-1psrprtos7q8dhp6.us.auth0.com",
+      "http://localhost:3000", // for local development
+      "http://localhost:3001", // for local development
     ],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With",
+      "Accept",
+      "Origin",
+      "Access-Control-Request-Method",
+      "Access-Control-Request-Headers",
+    ],
+    exposedHeaders: ["Set-Cookie"],
+    preflightContinue: false,
+    optionsSuccessStatus: 200,
   })
 );
+// Handle preflight requests explicitly
+app.options("*", cors());
 
 import studentRouter from "./routes/student.routes.js";
 import adminRouter from "./routes/admin.routes.js";

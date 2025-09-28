@@ -48,6 +48,11 @@ import {
 const studentRouter = express.Router();
 studentRouter.use(express.json());
 
+studentRouter.use((req, res, next) => {
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+});
+
 //User registration
 studentRouter.post("/registerUser", userRegister);
 
