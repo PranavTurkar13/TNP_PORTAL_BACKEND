@@ -8,7 +8,11 @@ import cors from "cors";
 
 app.use(
   cors({
-    origin: /https:\/\/.*\.vercel\.app$/,
+    origin: [
+      /https:\/\/.*\.vercel\.app$/,
+      /http:\/\/localhost:\d+/,
+      process.env.AUTH0_DOMAIN!,
+    ],
     credentials: true,
   })
 );
@@ -43,7 +47,7 @@ app.use("/api/v1/admin", adminRouter);
 
 app.get("/", (req, res) => {
   if (req.oidc?.isAuthenticated()) {
-    return res.redirect("https://main-tnp-portal-gold.vercel.app/success");
+    return res.redirect("https://tnp-frontend-gold.vercel.app/success");
   }
   res.send("❌ Logged out");
 });
