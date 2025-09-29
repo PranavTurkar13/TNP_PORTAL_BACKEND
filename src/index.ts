@@ -14,7 +14,7 @@ const allowedOrigins = [
 
 app.use((req, res, next) => {
   // Skip CORS for Auth0 callback
-  // if (req.path.startsWith("/callback")) return next();
+  if (req.path.startsWith("/callback")) return next();
 
   cors({
     origin: function (origin, callback) {
@@ -74,7 +74,7 @@ app.use("/api/v1/admin", adminRouter);
 
 app.use(auth(config));
 
-app.get("/callback", (req, res) => {
+app.get("/", (req, res) => {
   if (req.oidc?.isAuthenticated()) {
     return res.redirect("https://tnp-frontend-gold.vercel.app/success");
   }
