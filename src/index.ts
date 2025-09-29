@@ -68,11 +68,10 @@ const config = {
   },
 };
 
+app.use(auth(config));
 // Routes
 app.use("/api/v1/student", studentRouter);
 app.use("/api/v1/admin", adminRouter);
-
-app.use(auth(config));
 
 app.get("/", (req, res) => {
   if (req.oidc?.isAuthenticated()) {
