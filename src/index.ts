@@ -8,14 +8,13 @@ import cors from "cors";
 
 const allowedOrigins = [
   "https://tnp-frontend-gold.vercel.app",
-  "https://dev-1psrprtos7q8dhp6.us.auth0.com/*",
   "http://localhost:3000",
   "http://localhost:3001",
 ];
 
 app.use((req, res, next) => {
   // Skip CORS for Auth0 callback
-  if (req.path.startsWith("/callback")) return next();
+  // if (req.path.startsWith("/callback")) return next();
 
   cors({
     origin: function (origin, callback) {
@@ -63,12 +62,17 @@ const config = {
   baseURL: process.env.BASE_URL,
   clientID: process.env.AUTH0_CLIENT_ID,
   issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}`,
+  routes: {
+    callback: "/callback",
+    postLogoutRedirect: "https://tnp-frontend-gold.vercel.app",
+  },
 };
-app.use(auth(config));
 
 // Routes
 app.use("/api/v1/student", studentRouter);
 app.use("/api/v1/admin", adminRouter);
+
+app.use(auth(config));
 
 app.get("/", (req, res) => {
   if (req.oidc?.isAuthenticated()) {
