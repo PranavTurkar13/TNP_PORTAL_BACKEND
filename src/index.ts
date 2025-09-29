@@ -8,7 +8,7 @@ import cors from "cors";
 
 const allowedOrigins = [
   "https://tnp-frontend-gold.vercel.app",
-  "https://dev-1psrprtos7q8dhp6.us.auth0.com",
+  "https://dev-1psrprtos7q8dhp6.us.auth0.com/*",
   "http://localhost:3000",
   "http://localhost:3001",
 ];
