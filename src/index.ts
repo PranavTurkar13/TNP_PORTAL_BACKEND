@@ -74,7 +74,7 @@ app.use("/api/v1/admin", adminRouter);
 
 app.use(auth(config));
 
-app.get("/", (req, res) => {
+app.get("/callback", (req, res) => {
   if (req.oidc?.isAuthenticated()) {
     return res.redirect("https://tnp-frontend-gold.vercel.app/success");
   }
