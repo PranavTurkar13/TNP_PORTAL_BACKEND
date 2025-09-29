@@ -11,15 +11,13 @@ const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
 ];
-
-app.use((req, res, next) => {
-  // Skip CORS for Auth0 callback
-  if (req.path.startsWith("/callback")) return next();
-
+app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (server-to-server requests)
-      if (!origin || allowedOrigins.includes(origin)) {
+      // Allow requests with no origin (Postman, server-to-server)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
         console.warn("Blocked by CORS:", origin);
@@ -34,12 +32,9 @@ app.use((req, res, next) => {
       "X-Requested-With",
       "Accept",
       "Origin",
-      "Access-Control-Request-Method",
-      "Access-Control-Request-Headers",
     ],
-    exposedHeaders: ["Set-Cookie"],
-  })(req, res, next);
-});
+  })
+);
 
 import studentRouter from "./routes/student.routes.js";
 import adminRouter from "./routes/admin.routes.js";
@@ -65,6 +60,12 @@ const config = {
   routes: {
     callback: "/callback",
     postLogoutRedirect: "https://tnp-frontend-gold.vercel.app",
+  },
+  session: {
+    cookie: {
+      sameSite: "None", // ✅ Required for cross-domain
+      secure: true, // ✅ Required for production
+    },
   },
 };
 
