@@ -29,7 +29,7 @@ export const registerStudentProfile = async (req: Request, res: Response) => {
     }
 
     // Get the logged-in user's Auth0 ID
-    const auth0Id = req.oidc?.user?.sub;
+    const auth0Id = req.auth?.payload.sub;
     console.log(auth0Id);
     if (!auth0Id) {
       return res
@@ -78,7 +78,7 @@ export const registerStudentProfile = async (req: Request, res: Response) => {
 export const getStudentProfile = async (req: Request, res: Response) => {
   try {
     // Get Auth0 user id from token
-    const auth0Id = req.oidc?.user?.sub;
+    const auth0Id = req.auth?.payload.sub;
     console.log(auth0Id);
     if (!auth0Id) {
       return res
@@ -123,7 +123,7 @@ export const updateStudentProfile = async (req: Request, res: Response) => {
     } = req.body;
 
     // Get Auth0 user id from token
-    const auth0Id = req.oidc?.user?.sub;
+    const auth0Id = req.auth?.payload.sub;
     console.log(auth0Id);
     if (!auth0Id) {
       return res

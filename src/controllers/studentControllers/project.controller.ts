@@ -11,7 +11,7 @@ export const addProjectDetails = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    const auth0Id = req.oidc?.user?.sub;
+    const auth0Id = req.auth?.payload.sub;
     if (!auth0Id) {
       return res
         .status(401)
@@ -58,7 +58,7 @@ export const addProjectDetails = async (req: Request, res: Response) => {
 export const getProjectDetails = async (req: Request, res: Response) => {
   try {
     // Get Auth0 user id from token
-    const auth0Id = req.oidc?.user?.sub;
+    const auth0Id = req.auth?.payload.sub;
     console.log(auth0Id);
     if (!auth0Id) {
       return res
@@ -108,7 +108,7 @@ export const updateProjectDetails = async (req: Request, res: Response) => {
     const { title, description, link, techStack } = req.body;
 
     // Get Auth0 user id from token
-    const auth0Id = req.oidc?.user?.sub;
+    const auth0Id = req.auth?.payload.sub;
     if (!auth0Id) {
       return res
         .status(401)
@@ -170,7 +170,7 @@ export const deleteProjectDetails = async (req: Request, res: Response) => {
     }
 
     // Get Auth0 user id from token
-    const auth0Id = req.oidc?.user?.sub;
+    const auth0Id = req.auth?.payload.sub;
     if (!auth0Id) {
       return res
         .status(401)

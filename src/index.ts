@@ -1,117 +1,109 @@
 import express from "express";
-import pkg from "express-openid-connect";
+import type { Request, Response, NextFunction } from "express";
 import "dotenv/config";
 import db from "./client.js";
 import cors from "cors";
+import { auth } from "express-oauth2-jwt-bearer";
 import studentRouter from "./routes/student.routes.js";
 import adminRouter from "./routes/admin.routes.js";
 
-const { auth, requiresAuth } = pkg;
-
 const app = express();
 
-// ---------------- CORS ----------------
-app.use((req, res, next) => {
-  // Skip CORS for Auth0 callback
-  if (req.path === "/callback") return next();
+// ---------------- CORS (Using the package!) ----------------
+const allowedOrigins = [
+  "https://tnp-frontend-gold.vercel.app",
+  "http://localhost:3000",
+  "http://localhost:3001",
+];
 
-  const allowedOrigins = [
-    "https://tnp-frontend-gold.vercel.app",
-    "http://localhost:3000",
-    "http://localhost:3001",
-  ];
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps, Postman, curl)
+      if (!origin) return callback(null, true);
 
-  const origin = req.headers.origin;
-  if (!origin || allowedOrigins.includes(origin)) {
-    res.header("Access-Control-Allow-Origin", origin || "*");
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-    );
-    res.header(
-      "Access-Control-Allow-Methods",
-      "GET, POST, PUT, DELETE, OPTIONS, PATCH"
-    );
-    if (req.method === "OPTIONS") return res.sendStatus(204);
-    return next();
-  }
-
-  console.warn("Blocked by CORS:", origin);
-  return res.status(403).send("Not allowed by CORS");
-});
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.warn("❌ Blocked by CORS:", origin);
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // Allow cookies
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With",
+      "Accept",
+      "Origin",
+    ],
+    optionsSuccessStatus: 204, // For legacy browsers
+  })
+);
 
 // ---------------- Middleware ----------------
 app.use(express.json());
-
-// ---------------- Auth0 Config ----------------
-if (
-  !process.env.AUTH0_SECRET ||
-  !process.env.AUTH0_CLIENT_ID ||
-  !process.env.AUTH0_DOMAIN ||
-  !process.env.BASE_URL
-) {
-  throw new Error("Missing Auth0 environment variables. Please check .env");
-}
-
-const config = {
-  authRequired: false,
-  auth0Logout: true,
-  secret: process.env.AUTH0_SECRET,
-  baseURL: process.env.BASE_URL,
-  clientID: process.env.AUTH0_CLIENT_ID,
-  issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}`,
-  routes: {
-    callback: "/callback",
-    postLogoutRedirect: "https://tnp-frontend-gold.vercel.app",
-  },
-  session: {
-    cookie: {
-      sameSite: "None",
-      secure: true, // Must be true in production
-    },
-  },
-};
-
-app.use(auth(config));
+const checkJwt = auth({
+  audience: process.env.AUTH0_AUDIENCE!,
+  issuerBaseURL: `https://${process.env.AUTH0_DOMAIN!}/`,
+});
 
 // ---------------- Routes ----------------
-app.use("/api/v1/student", studentRouter);
-app.use("/api/v1/admin", adminRouter);
+app.use("/api/v1/student", checkJwt, studentRouter);
+app.use("/api/v1/admin", checkJwt, adminRouter);
+
+app.get("/secure-route", checkJwt, (req, res) => {
+  res.json({ message: "You are authenticated!", user: req.auth?.payload.sub });
+});
 
 // Root
-app.get("/", (req, res) => {
-  if (req.oidc?.isAuthenticated()) {
-    return res.redirect("https://tnp-frontend-gold.vercel.app/success");
-  }
-  res.send("❌ Logged out");
-});
+// app.get("/", (req, res) => {
+//   return res.redirect("https://tnp-frontend-gold.vercel.app/success");
+//   // res.json({ message: "API is running", authenticated: false });
+// });
 
-// Profile route
-app.get("/profile", requiresAuth(), async (req, res) => {
-  try {
-    const auth0Id = req.oidc?.user!.sub;
+// // Profile route
+// app.get("/profile", requiresAuth(), async (req, res) => {
+//   try {
+//     const auth0Id = req.oidc?.user!.sub;
 
-    const dbUser = await db.user.findUnique({
-      where: { auth0Id },
-    });
+//     const dbUser = await db.user.findUnique({
+//       where: { auth0Id },
+//     });
 
-    if (!dbUser)
-      return res.status(404).json({ message: "User not found in DB" });
+//     if (!dbUser) {
+//       return res.status(404).json({ message: "User not found in DB" });
+//     }
 
-    res.json(dbUser);
-  } catch (err: any) {
-    res.status(500).json({ error: err.message });
-  }
-});
+//     res.json(dbUser);
+//   } catch (err: any) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
 
-// Access Denied
-app.get("/access-denied", (req, res) => {
-  res.send("Access Denied");
+// // Check auth status (useful for frontend)
+// app.get("/api/auth/status", (req, res) => {
+//   res.json({
+//     isAuthenticated: req.oidc?.isAuthenticated() || false,
+//     user: req.oidc?.user || null,
+//   });
+// });
+
+// // Access Denied
+// app.get("/access-denied", (req, res) => {
+//   res.send("Access Denied");
+// });
+
+// ---------------- Error Handler ----------------
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.error("Error:", err.message);
+  res.status(500).json({ error: "Internal server error" });
 });
 
 // ---------------- Server ----------------
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📍 Base URL: ${process.env.BASE_URL}`);
 });

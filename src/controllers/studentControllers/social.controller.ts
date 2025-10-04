@@ -11,7 +11,7 @@ export const addSocialsDetails = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Social Link is required" });
     }
 
-    const auth0Id = req.oidc?.user?.sub;
+    const auth0Id = req.auth?.payload.sub;
     if (!auth0Id) {
       return res
         .status(401)
@@ -64,7 +64,7 @@ export const addSocialsDetails = async (req: Request, res: Response) => {
 export const getSocialsDetails = async (req: Request, res: Response) => {
   try {
     // Get Auth0 user id from token
-    const auth0Id = req.oidc?.user?.sub;
+    const auth0Id = req.auth?.payload.sub;
     console.log(auth0Id);
     if (!auth0Id) {
       return res
@@ -114,7 +114,7 @@ export const updateSocialsDetails = async (req: Request, res: Response) => {
     const { platform, url } = req.body;
 
     // Get Auth0 user id from token
-    const auth0Id = req.oidc?.user?.sub;
+    const auth0Id = req.auth?.payload.sub;
     if (!auth0Id) {
       return res
         .status(401)
@@ -173,7 +173,7 @@ export const deleteSocialsDetails = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "socialsID is required" });
     }
     // Get Auth0 user id from token
-    const auth0Id = req.oidc?.user?.sub;
+    const auth0Id = req.auth?.payload.sub;
     if (!auth0Id) {
       return res
         .status(401)

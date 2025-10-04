@@ -31,7 +31,7 @@ export const addEducationDetails = async (req: Request, res: Response) => {
     }
 
     // Get Auth0 user id from token
-    const auth0Id = req.oidc?.user?.sub;
+    const auth0Id = req.auth?.payload.sub;
     // const auth0Id = "";
     console.log(auth0Id);
     if (!auth0Id) {
@@ -97,7 +97,7 @@ export const addEducationDetails = async (req: Request, res: Response) => {
 export const getEducationDetails = async (req: Request, res: Response) => {
   try {
     // Get Auth0 user id from token
-    const auth0Id = req.oidc?.user?.sub;
+    const auth0Id = req.auth?.payload.sub;
     console.log(auth0Id);
     if (!auth0Id) {
       return res
@@ -154,7 +154,7 @@ export const updateEducationDetails = async (req: Request, res: Response) => {
     } = req.body;
 
     // Get Auth0 user id from token
-    const auth0Id = req.oidc?.user?.sub;
+    const auth0Id = req.auth?.payload.sub;
     console.log(auth0Id);
     if (!auth0Id) {
       return res
@@ -240,7 +240,7 @@ export const updateEducationDetails = async (req: Request, res: Response) => {
 export const deleteEducationDetails = async (req: Request, res: Response) => {
   try {
     // Get Auth0 user id from token
-    const auth0Id = req.oidc?.user?.sub;
+    const auth0Id = req.auth?.payload.sub;
     console.log(auth0Id);
     if (!auth0Id) {
       return res

@@ -57,57 +57,53 @@ studentRouter.use((req, res, next) => {
 studentRouter.post("/registerUser", userRegister);
 
 // STUDENT PROFILE REGISTRATION ROUTES
-studentRouter.get("/profile", requiresAuth(), getStudentProfile);
-studentRouter.post("/registerStudent", requiresAuth(), registerStudentProfile);
-studentRouter.put("/editProfile", requiresAuth(), updateStudentProfile);
+studentRouter.get("/profile", getStudentProfile);
+studentRouter.post("/registerStudent", registerStudentProfile);
+studentRouter.put("/editProfile", updateStudentProfile);
 
 // Education routes
-studentRouter.get("/education", requiresAuth(), getEducationDetails);
-studentRouter.post("/addEducation", requiresAuth(), addEducationDetails);
-studentRouter.put("/editEducation", requiresAuth(), updateEducationDetails);
-studentRouter.delete("/education", requiresAuth(), deleteEducationDetails);
+studentRouter.get("/education", getEducationDetails);
+studentRouter.post("/addEducation", addEducationDetails);
+studentRouter.put("/editEducation", updateEducationDetails);
+studentRouter.delete("/education", deleteEducationDetails);
 
 //ACHIEVEMENT ROUTES
-studentRouter.get("/achievement", requiresAuth(), getAchievementDetails);
-studentRouter.post("/addAchievement", requiresAuth(), addAchievementDetails);
+studentRouter.get("/achievement", getAchievementDetails);
+studentRouter.post("/addAchievement", addAchievementDetails);
 studentRouter.put(
   "/editAchievement/:achievementID",
-  requiresAuth(),
+
   updateAchievementDetails
 );
 studentRouter.delete(
   "/achievement/:achievementID",
-  requiresAuth(),
+
   deleteAchievementDetails
 );
 
 // //PROJECT ROUTES
-studentRouter.get("/project", requiresAuth(), getProjectDetails);
-studentRouter.post("/addProject", requiresAuth(), addProjectDetails);
+studentRouter.get("/project", getProjectDetails);
+studentRouter.post("/addProject", addProjectDetails);
 studentRouter.put(
   "/editProject/:projectID",
-  requiresAuth(),
+
   updateProjectDetails
 );
 studentRouter.delete(
   "/project/:projectID",
-  requiresAuth(),
+
   deleteProjectDetails
 );
 
 // //INTERNSHIP ROUTES
-studentRouter.get("/internship", requiresAuth(), getInternshipDetails);
-studentRouter.post("/addInternship", requiresAuth(), addInternshipDetails);
+studentRouter.get("/internship", getInternshipDetails);
+studentRouter.post("/addInternship", addInternshipDetails);
 studentRouter.put(
   "/internship/:internshipID",
-  requiresAuth(),
+
   updateInternshipDetails
 );
-studentRouter.delete(
-  "/internship/:internshipID",
-  requiresAuth(),
-  deleteInternshipDetails
-);
+studentRouter.delete("/internship/:internshipID", deleteInternshipDetails);
 
 // //Certificate Routes
 // studentRouter.get("/profile/certificate", middleware, cont_func);
@@ -120,12 +116,12 @@ studentRouter.delete(
 // );
 
 // //SOCIAL ROUTES
-studentRouter.get("/social", requiresAuth(), getSocialsDetails);
-studentRouter.post("/addSocial", requiresAuth(), addSocialsDetails);
-studentRouter.put("/social/:socialsID", requiresAuth(), updateSocialsDetails);
+studentRouter.get("/social", getSocialsDetails);
+studentRouter.post("/addSocial", addSocialsDetails);
+studentRouter.put("/social/:socialsID", updateSocialsDetails);
 studentRouter.delete(
   "/social/:socialsID",
-  requiresAuth(),
+
   deleteSocialsDetails
 );
 

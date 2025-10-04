@@ -5,7 +5,7 @@ import db from "../../client.js";
 //GET ACHIEVEMENT DETAILS CONTROLLER
 export const getAchievementDetails = async (req: Request, res: Response) => {
   try {
-    const auth0Id = req.oidc?.user?.sub;
+    const auth0Id = req.auth?.payload.sub;
     console.log(auth0Id);
     if (!auth0Id) {
       return res
@@ -65,7 +65,7 @@ export const addAchievementDetails = async (req: Request, res: Response) => {
     }
 
     // Get Auth0 user id from token
-    const auth0Id = req.oidc?.user?.sub;
+    const auth0Id = req.auth?.payload.sub;
     console.log(auth0Id);
     if (!auth0Id) {
       return res
@@ -122,7 +122,7 @@ export const updateAchievementDetails = async (req: Request, res: Response) => {
     const { title, description, date, type } = req.body;
 
     // Get Auth0 user id from token
-    const auth0Id = req.oidc?.user?.sub;
+    const auth0Id = req.auth?.payload.sub;
     if (!auth0Id) {
       return res
         .status(401)
@@ -184,7 +184,7 @@ export const deleteAchievementDetails = async (req: Request, res: Response) => {
     }
 
     // Get Auth0 user id from token
-    const auth0Id = req.oidc?.user?.sub;
+    const auth0Id = req.auth?.payload.sub;
     if (!auth0Id) {
       return res
         .status(401)
