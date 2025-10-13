@@ -45,7 +45,7 @@ app.use(
 // ---------------- Middleware ----------------
 app.use(express.json());
 const checkJwt = auth({
-  audience: process.env.AUTH0_AUDIENCE!,
+  audience: process.env.AUDIENCE!,
   issuerBaseURL: `https://${process.env.AUTH0_DOMAIN!}/`,
 });
 
@@ -58,29 +58,29 @@ app.get("/secure-route", checkJwt, (req, res) => {
 });
 
 // Root
-// app.get("/", (req, res) => {
-//   return res.redirect("https://tnp-frontend-gold.vercel.app/success");
-//   // res.json({ message: "API is running", authenticated: false });
-// });
+app.get("/", (req, res) => {
+  // return res.redirect("https://tnp-frontend-gold.vercel.app/success");
+  res.json({ message: "API is running", authenticated: false });
+});
 
-// // Profile route
-// app.get("/profile", requiresAuth(), async (req, res) => {
-//   try {
-//     const auth0Id = req.oidc?.user!.sub;
+// Profile route
+app.get("/profile", checkJwt, async (req, res) => {
+  try {
+    const auth0Id = req.auth?.payload.sub!;
 
-//     const dbUser = await db.user.findUnique({
-//       where: { auth0Id },
-//     });
+    const dbUser = await db.user.findUnique({
+      where: { auth0Id },
+    });
 
-//     if (!dbUser) {
-//       return res.status(404).json({ message: "User not found in DB" });
-//     }
+    if (!dbUser) {
+      return res.status(404).json({ message: "User not found in DB" });
+    }
 
-//     res.json(dbUser);
-//   } catch (err: any) {
-//     res.status(500).json({ error: err.message });
-//   }
-// });
+    res.json(dbUser);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // // Check auth status (useful for frontend)
 // app.get("/api/auth/status", (req, res) => {
