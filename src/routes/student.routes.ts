@@ -1,8 +1,7 @@
 import express from "express";
 import pkg from "express-openid-connect";
 const { requiresAuth } = pkg;
-//User Controller
-import { userRegister } from "../controllers/studentControllers/user.controller.js";
+
 //Profile Controller
 import {
   getStudentProfile,
@@ -52,9 +51,6 @@ studentRouter.use((req, res, next) => {
   res.header("Access-Control-Allow-Credentials", "true");
   next();
 });
-
-//User registration
-studentRouter.post("/registerUser", userRegister);
 
 // STUDENT PROFILE REGISTRATION ROUTES
 studentRouter.get("/profile", getStudentProfile);
