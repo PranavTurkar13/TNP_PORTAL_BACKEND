@@ -48,7 +48,7 @@ export const registerStudentProfile = async (req: Request, res: Response) => {
       where: { userId: user.id },
     });
     if (existingProfile) {
-      return res.status(409).json({ error: "Student profile already exists" });
+      return res.status(200).json({ error: "Student profile already exists" });
     }
 
     // Create StudentProfile linked to this user
