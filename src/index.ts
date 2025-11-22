@@ -6,6 +6,7 @@ import cors from "cors";
 import { auth } from "express-oauth2-jwt-bearer";
 import studentRouter from "./routes/student.routes.js";
 import adminRouter from "./routes/admin.routes.js";
+import userRouter from "./routes/user.routes.js";
 
 const app = express();
 
@@ -50,6 +51,7 @@ const checkJwt = auth({
 });
 
 // ---------------- Routes ----------------
+app.use("/api/v1/user", userRouter);
 app.use("/api/v1/student", checkJwt, studentRouter);
 app.use("/api/v1/admin", checkJwt, adminRouter);
 
