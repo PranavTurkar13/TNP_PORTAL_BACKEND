@@ -1,12 +1,19 @@
 import type { Request, Response } from "express";
 import db from "../../client.js";
 
-// // INTERNSHIP CONTROLLERS
-// Add Internship Details
-export const addInternshipDetails = async (req: Request, res: Response) => {
+// // CERTIFICATE CONTROLLERS
+// Add Certificate Details
+export const addCertificateDetails = async (req: Request, res: Response) => {
   try {
-    const { company, role, duration, description } = req.body;
-    if (!company || !role || !duration || !description) {
+    const {
+      title,
+      organization,
+      issueDate,
+      expiryDate,
+      credentialId,
+      credentialUrl,
+    } = req.body;
+    if (!title || !organization || !issueDate || !credentialUrl) {
       return res.status(400).json({ error: "All fields are required" });
     }
 
@@ -31,30 +38,39 @@ export const addInternshipDetails = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Student profile not found" });
     }
 
-    const internship = await db.internship.create({
+    const duplicate = await db.certification.findFirst({
+      where: { studentId: profile.id, title, organization, credentialUrl },
+    });
+    if (duplicate) {
+      return res.status(409).json({ error: "Certificate already exists" });
+    }
+
+    const certificate = await db.certification.create({
       data: {
         studentId: profile.id,
-        company,
-        role,
-        duration,
-        description,
+        title,
+        organization,
+        issueDate: new Date(issueDate),
+        expiryDate: expiryDate ? new Date(expiryDate) : null,
+        credentialId: credentialId ? credentialId : null,
+        credentialUrl,
       },
     });
 
     return res.status(201).json({
-      message: "Internship added successfully",
-      internship,
+      message: "Certificate added successfully",
+      certificate,
     });
   } catch (error: any) {
-    console.error("Error adding internship:", error);
+    console.error("Error adding certificate:", error);
     return res.status(500).json({
       error: error.message || "Internal server error",
     });
   }
 };
 
-//Get Internship Details
-export const getInternshipDetails = async (req: Request, res: Response) => {
+//Get Certificate Details
+export const getCertificateDetails = async (req: Request, res: Response) => {
   try {
     // Get Auth0 user id from token
     const auth0Id = req.auth?.payload.sub;
@@ -80,16 +96,16 @@ export const getInternshipDetails = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Student profile not found" });
     }
 
-    // Find internship details
-    const internship = await db.internship.findMany({
+    // Find certificate details
+    const certificate = await db.certification.findMany({
       where: { studentId: profile.id },
     });
 
-    if (!internship) {
-      return res.status(404).json({ error: "Internship details not found" });
+    if (!certificate) {
+      return res.status(404).json({ error: "Certificate details not found" });
     }
 
-    return res.status(200).json({ internship });
+    return res.status(200).json({ certificate });
   } catch (error: any) {
     return res
       .status(500)
@@ -97,14 +113,21 @@ export const getInternshipDetails = async (req: Request, res: Response) => {
   }
 };
 
-// Update Internship Details
-export const updateInternshipDetails = async (req: Request, res: Response) => {
+// Update Certificate Details
+export const updateCertficateDetails = async (req: Request, res: Response) => {
   try {
-    const { internshipID } = req.params;
-    if (!internshipID) {
-      return res.status(400).json({ error: "internshipID is required" });
+    const { certificateID } = req.params;
+    if (!certificateID) {
+      return res.status(400).json({ error: "certificateID is required" });
     }
-    const { company, role, duration, description } = req.body;
+    const {
+      title,
+      organization,
+      issueDate,
+      expiryDate,
+      credentialId,
+      credentialUrl,
+    } = req.body;
 
     // Get Auth0 user id from token
     const auth0Id = req.auth?.payload.sub;
@@ -114,50 +137,51 @@ export const updateInternshipDetails = async (req: Request, res: Response) => {
         .json({ error: "Unauthorized: user not logged in" });
     }
 
-    // Find user with profile
-    const userWithProfileAndInternship = await db.user.findUnique({
+    const userWithProfileAndCertificates = await db.user.findUnique({
       where: { auth0Id },
       include: {
         student: {
           include: {
-            internships: true,
+            certifications: true,
           },
         },
       },
     });
 
-    if (!userWithProfileAndInternship) {
+    if (!userWithProfileAndCertificates) {
       return res.status(404).json({ error: "User not found in database" });
     }
 
-    const profile = userWithProfileAndInternship.student;
+    const profile = userWithProfileAndCertificates.student;
     if (!profile) {
       return res.status(404).json({ error: "Student profile not found" });
     }
 
     // Checking if certificate belongs to this student
-    const internship = await db.internship.findUnique({
-      where: { id: internshipID },
+    const certificate = await db.certification.findUnique({
+      where: { id: certificateID },
     });
 
-    if (!internship || internship.studentId !== profile.id) {
+    if (!certificate || certificate.studentId !== profile.id) {
       return res.status(404).json({ error: "Certificate not found" });
     }
 
     // Update internship
-    const updatedInternship = await db.internship.update({
-      where: { id: internshipID },
+    const updatedCertificate = await db.certification.update({
+      where: { id: certificateID },
       data: {
-        company: company ?? internship.company,
-        role: role ?? internship.role,
-        duration: duration ?? internship.duration,
-        description: description ?? internship.description,
+        title: title ?? certificate.title,
+        organization: organization ?? certificate.organization,
+        issueDate: issueDate ? new Date(issueDate) : certificate.issueDate,
+        expiryDate: expiryDate ? new Date(expiryDate) : certificate.expiryDate,
+        credentialId: credentialId ?? certificate.credentialId,
+        credentialUrl: credentialUrl ?? certificate.credentialUrl,
       },
     });
 
     return res.status(200).json({
-      message: "Internship updated successfully",
-      internship: updatedInternship,
+      message: "Certificate updated successfully",
+      certificate: updatedCertificate,
     });
   } catch (error: any) {
     return res
@@ -166,12 +190,12 @@ export const updateInternshipDetails = async (req: Request, res: Response) => {
   }
 };
 
-// Delete Internship Details
-export const deleteInternshipDetails = async (req: Request, res: Response) => {
+// Delete Certificate Details
+export const deleteCertificateDetails = async (req: Request, res: Response) => {
   try {
-    const { internshipID } = req.params;
-    if (!internshipID) {
-      return res.status(400).json({ error: "internshipID is required" });
+    const { certificateID } = req.params;
+    if (!certificateID) {
+      return res.status(400).json({ error: "certificateID is required" });
     }
 
     // Get Auth0 user id from token
@@ -183,39 +207,41 @@ export const deleteInternshipDetails = async (req: Request, res: Response) => {
     }
 
     // Find user with profile
-    const userWithProfileAndInternship = await db.user.findUnique({
+    const userWithProfileAndCertificates = await db.user.findUnique({
       where: { auth0Id },
       include: {
         student: {
           include: {
-            internships: true,
+            certifications: true,
           },
         },
       },
     });
 
-    if (!userWithProfileAndInternship) {
+    if (!userWithProfileAndCertificates) {
       return res.status(404).json({ error: "User not found in database" });
     }
 
-    const profile = userWithProfileAndInternship.student;
+    const profile = userWithProfileAndCertificates.student;
     if (!profile) {
       return res.status(404).json({ error: "Student profile not found" });
     }
 
     // Checking if certificate belongs to this student
-    const internship = await db.internship.findUnique({
-      where: { id: internshipID },
+    const certificate = await db.certification.findUnique({
+      where: { id: certificateID },
     });
 
-    if (!internship || internship.studentId !== profile.id) {
+    if (!certificate || certificate.studentId !== profile.id) {
       return res.status(404).json({ error: "Certificate not found" });
     }
 
-    // Delete internship
-    await db.internship.delete({ where: { id: internshipID } });
+    // Delete certificate
+    await db.certification.delete({ where: { id: certificateID } });
 
-    return res.status(200).json({ message: "Internship deleted successfully" });
+    return res
+      .status(200)
+      .json({ message: "Certificate deleted successfully" });
   } catch (error: any) {
     return res
       .status(500)

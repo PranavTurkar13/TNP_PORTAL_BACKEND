@@ -36,6 +36,13 @@ import {
   updateInternshipDetails,
   deleteInternshipDetails,
 } from "../controllers/studentControllers/internship.controller.js";
+//Certificate Controller
+import {
+  addCertificateDetails,
+  getCertificateDetails,
+  updateCertficateDetails,
+  deleteCertificateDetails,
+} from "../controllers/studentControllers/certificate.controller.js";
 //Social Controller
 import {
   addSocialsDetails,
@@ -66,60 +73,32 @@ studentRouter.delete("/education", deleteEducationDetails);
 //ACHIEVEMENT ROUTES
 studentRouter.get("/achievement", getAchievementDetails);
 studentRouter.post("/addAchievement", addAchievementDetails);
-studentRouter.put(
-  "/editAchievement/:achievementID",
-
-  updateAchievementDetails
-);
-studentRouter.delete(
-  "/achievement/:achievementID",
-
-  deleteAchievementDetails
-);
+studentRouter.put("/editAchievement/:achievementID", updateAchievementDetails);
+studentRouter.delete("/achievement/:achievementID", deleteAchievementDetails);
 
 // //PROJECT ROUTES
 studentRouter.get("/project", getProjectDetails);
 studentRouter.post("/addProject", addProjectDetails);
-studentRouter.put(
-  "/editProject/:projectID",
-
-  updateProjectDetails
-);
-studentRouter.delete(
-  "/project/:projectID",
-
-  deleteProjectDetails
-);
+studentRouter.put("/editProject/:projectID", updateProjectDetails);
+studentRouter.delete("/project/:projectID", deleteProjectDetails);
 
 // //INTERNSHIP ROUTES
 studentRouter.get("/internship", getInternshipDetails);
 studentRouter.post("/addInternship", addInternshipDetails);
-studentRouter.put(
-  "/internship/:internshipID",
-
-  updateInternshipDetails
-);
+studentRouter.put("/internship/:internshipID", updateInternshipDetails);
 studentRouter.delete("/internship/:internshipID", deleteInternshipDetails);
 
-// //Certificate Routes
-// studentRouter.get("/profile/certificate", middleware, cont_func);
-// studentRouter.post("/profile/certificate", middleware, cont_func);
-// studentRouter.put("/profile/certificate/:certificateID", middleware, cont_func);
-// studentRouter.delete(
-//   "profile/certificate/:certificateID",
-//   middleware,
-//   cont_func
-// );
+//Certificate Routes
+studentRouter.get("/certificate", getCertificateDetails);
+studentRouter.post("/addCertificate", addCertificateDetails);
+studentRouter.put("/certificate/:certificateID", updateCertficateDetails);
+studentRouter.delete("/certificate/:certificateID", deleteCertificateDetails);
 
 // //SOCIAL ROUTES
 studentRouter.get("/social", getSocialsDetails);
 studentRouter.post("/addSocial", addSocialsDetails);
 studentRouter.put("/social/:socialsID", updateSocialsDetails);
-studentRouter.delete(
-  "/social/:socialsID",
-
-  deleteSocialsDetails
-);
+studentRouter.delete("/social/:socialsID", deleteSocialsDetails);
 
 // //APPLICATION ROUTE
 // studentRouter.get("profile/applications", middleware, cont_func);
