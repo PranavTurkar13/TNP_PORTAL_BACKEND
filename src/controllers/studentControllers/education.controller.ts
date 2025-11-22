@@ -71,7 +71,7 @@ export const addEducationDetails = async (req: Request, res: Response) => {
         branch,
         enrollmentYear: Number(enrollmentYear),
         passingYear: enrollmentYear + (diplomaYear ? 3 : 4), // Default passing year to enrollmentYear + 4
-        cgpa: Number(cgpa),
+        cgpa: backlogs ? 0 : Number(cgpa),
         tenthPercent: tenthPercent ? Number(tenthPercent) : null,
         tenthYear: tenthYear ? Number(tenthYear) : null,
         twelfthPercent: twelfthPercent ? Number(twelfthPercent) : null,
