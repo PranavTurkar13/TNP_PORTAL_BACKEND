@@ -22,7 +22,7 @@ export const addEducationDetails = async (req: Request, res: Response) => {
     if (
       !branch ||
       !enrollmentYear ||
-      cgpa === undefined ||
+      cgpa === 0 ||
       backlogs === undefined
     ) {
       return res.status(400).json({
@@ -61,7 +61,7 @@ export const addEducationDetails = async (req: Request, res: Response) => {
     });
 
     if (existingEducation) {
-      return res.status(409).json({ error: "Education details already exist" });
+      return res.status(200).json({ error: "Education details already exist" });
     }
 
     // Create education details
@@ -71,7 +71,7 @@ export const addEducationDetails = async (req: Request, res: Response) => {
         branch,
         enrollmentYear: Number(enrollmentYear),
         passingYear: enrollmentYear + (diplomaYear ? 3 : 4), // Default passing year to enrollmentYear + 4
-        cgpa: Number(cgpa),
+        cgpa: backlogs ? 0 :Number(cgpa),
         tenthPercent: tenthPercent ? Number(tenthPercent) : null,
         tenthYear: tenthYear ? Number(tenthYear) : null,
         twelfthPercent: twelfthPercent ? Number(twelfthPercent) : null,
@@ -82,7 +82,7 @@ export const addEducationDetails = async (req: Request, res: Response) => {
       },
     });
 
-    return res.status(201).json({
+    return res.status(200).json({
       message: "Education details added successfully",
       education,
     });
