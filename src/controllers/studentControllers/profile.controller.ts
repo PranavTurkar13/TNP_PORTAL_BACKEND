@@ -44,29 +44,39 @@ export const registerStudentProfile = async (req: Request, res: Response) => {
     }
 
     // Check if StudentProfile already exists
-    const existingProfile = await db.studentProfile.findUnique({
+    const profile = await db.studentProfile.upsert({
       where: { userId: user.id },
-    });
-    if (existingProfile) {
-      return res.status(200).json({ error: "Student profile already exists" });
-    }
-
-    // Create StudentProfile linked to this user
-    const profile = await db.studentProfile.create({
-      data: {
+      update: {
+        firstName,
+        middleName: middleName ?? null,
+        lastName,
+        personalEmail: personalEmail ?? null,
+        phoneNo: phoneNo ?? null,
+        dob: dob ? new Date(dob) : null,
+        skills: skills || [],
+      },
+      create: {
         userId: user.id,
         firstName,
         middleName: middleName ?? null,
         lastName,
         personalEmail: personalEmail ?? null,
-        phoneNo: phoneNo ? phoneNo : null,
+        phoneNo: phoneNo ?? null,
         dob: dob ? new Date(dob) : null,
         skills: skills || [],
       },
     });
 
+    await db.user.update({
+      where: { id: user.id },
+      data: {
+        onboardingStep: "EDUCATION",
+      },
+    });
+
     return res.status(201).json({
       message: "Student profile added successfully",
+      nextStep: "EDUCATION",
       profile,
     });
   } catch (error: any) {

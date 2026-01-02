@@ -19,12 +19,7 @@ export const addEducationDetails = async (req: Request, res: Response) => {
     } = req.body;
 
     // Validate required fields
-    if (
-      !branch ||
-      !enrollmentYear ||
-      cgpa === 0 ||
-      backlogs === undefined
-    ) {
+    if (!branch || !enrollmentYear || cgpa === 0 || backlogs === undefined) {
       return res.status(400).json({
         error: "branch, enrollmentYear, cgpa, and backlogs are required fields",
       });
@@ -55,22 +50,26 @@ export const addEducationDetails = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Student profile not found" });
     }
 
-    // Check if education details already exist
-    const existingEducation = await db.education.findUnique({
+    const education = await db.education.upsert({
       where: { studentId: profile.id },
-    });
-
-    if (existingEducation) {
-      return res.status(200).json({ error: "Education details already exist" });
-    }
-
-    // Create education details
-    const education = await db.education.create({
-      data: {
+      update: {
+        branch,
+        enrollmentYear: Number(enrollmentYear),
+        passingYear: enrollmentYear + (diplomaYear ? 3 : 4),
+        cgpa: backlogs ? 0 : Number(cgpa),
+        tenthPercent: tenthPercent ? Number(tenthPercent) : null,
+        tenthYear: tenthYear ? Number(tenthYear) : null,
+        twelfthPercent: twelfthPercent ? Number(twelfthPercent) : null,
+        twelfthYear: twelfthYear ? Number(twelfthYear) : null,
+        diplomaPercent: diplomaPercent ? Number(diplomaPercent) : null,
+        diplomaYear: diplomaYear ? Number(diplomaYear) : null,
+        backlogs: Number(backlogs),
+      },
+      create: {
         studentId: profile.id,
         branch,
         enrollmentYear: Number(enrollmentYear),
-        passingYear: enrollmentYear + (diplomaYear ? 3 : 4), // Default passing year to enrollmentYear + 4
+        passingYear: enrollmentYear + (diplomaYear ? 3 : 4),
         cgpa: backlogs ? 0 : Number(cgpa),
         tenthPercent: tenthPercent ? Number(tenthPercent) : null,
         tenthYear: tenthYear ? Number(tenthYear) : null,
@@ -82,8 +81,16 @@ export const addEducationDetails = async (req: Request, res: Response) => {
       },
     });
 
+    await db.user.update({
+      where: { id: user.id },
+      data: {
+        onboardingStep: "COMPLETED",
+      },
+    });
+
     return res.status(200).json({
       message: "Education details added successfully",
+      nextStep: "COMPLETED",
       education,
     });
   } catch (error: any) {

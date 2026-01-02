@@ -9,12 +9,13 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  auth0Id   String   @unique
-  email     String   @unique
-  role      Role     @default(STUDENT)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String         @id @default(uuid())
+  auth0Id        String         @unique
+  email          String         @unique
+  role           Role           @default(STUDENT)
+  onboardingStep OnboardingStep @default(PROFILE)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 
   // Relations
   student  StudentProfile?
@@ -169,4 +170,10 @@ enum ApplicationStatus {
   SHORTLISTED
   SELECTED
   REJECTED
+}
+
+enum OnboardingStep {
+  PROFILE
+  EDUCATION
+  COMPLETED
 }

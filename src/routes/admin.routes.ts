@@ -1,8 +1,16 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { addPostingDetails, getPostingDetails, updatePostingDetails } from "../controllers/adminControllers/posting.controller.js";
-import { addEligibilityCriteria, updateEligibilityCriteria, getEligibilityCriteria } from "../controllers/adminControllers/eligibility.controller.js";
+import {
+  addPostingDetails,
+  getPostingDetails,
+  updatePostingDetails,
+} from "../controllers/adminControllers/posting.controller.js";
+import {
+  addEligibilityCriteria,
+  updateEligibilityCriteria,
+  getEligibilityCriteria,
+} from "../controllers/adminControllers/eligibility.controller.js";
 
 const adminRouter = express.Router();
 adminRouter.use(express.json());
@@ -16,4 +24,3 @@ adminRouter.put("/editEligibilityCriteria", updateEligibilityCriteria);
 adminRouter.get("/getEligibilityCriteria/:jobPostId", getEligibilityCriteria);
 
 export default adminRouter;
-
