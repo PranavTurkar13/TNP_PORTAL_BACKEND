@@ -188,3 +188,39 @@ export const updateStudentProfile = async (req: Request, res: Response) => {
       .json({ error: error.message || "Internal server error" });
   }
 };
+
+//GET FULL STUDENT PROFILE WITH EDUCATION AND EXPERIENCE AND ALL
+export const getFullStudentProfile = async (req: Request, res: Response) => {
+  try {
+    // Get Auth0 user id from token
+    const auth0Id = req.auth?.payload.sub;
+    if (!auth0Id) {
+      return res
+        .status(401)
+        .json({ error: "Unauthorized: user not logged in" });
+    }
+    const user = await db.user.findUnique({
+      where: { auth0Id },
+      include: {
+        student: {
+          include: {
+            education: true,
+            achievements: true,
+            projects: true,
+            internships: true,
+            certifications: true,
+            socials: true,
+          },
+        },
+      },
+    });
+    if (!user || !user.student) {
+      return res.status(404).json({ error: "Student profile not found" });
+    }
+    return res.status(200).json({ profile: user.student });
+  } catch (error: any) {
+    return res
+      .status(500)
+      .json({ error: error.message || "Internal server error" });
+  }
+};
