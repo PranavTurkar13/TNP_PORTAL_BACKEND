@@ -3,6 +3,14 @@ import db from "../../client.js";
 
 export const addEligibilityCriteria = async (req: Request, res: Response) => {
     try {
+        const auth0Id = req.auth?.payload.sub!;
+        const user = await db.user.findUnique({
+            where: { auth0Id },
+        });
+
+        if (user?.role !== "ADMIN") {
+            return res.status(403).json({ error: "Unauthorized" });
+        }
         const { jobPostId, minCGPA, allowedBranches, maxBacklogs, minTenth, minTwelfth, minDiploma, passingYear } = req.body;
 
         const eligibility = await db.eligibilityCriteria.create({
@@ -27,6 +35,14 @@ export const addEligibilityCriteria = async (req: Request, res: Response) => {
 
 export const updateEligibilityCriteria = async (req: Request, res: Response) => {
     try {
+        const auth0Id = req.auth?.payload.sub!;
+        const user = await db.user.findUnique({
+            where: { auth0Id },
+        });
+
+        if (user?.role !== "ADMIN") {
+            return res.status(403).json({ error: "Unauthorized" });
+        }
         const { jobPostId, minCGPA, allowedBranches, maxBacklogs, minTenth, minTwelfth, minDiploma, passingYear } = req.body;
         const eligibility = await db.eligibilityCriteria.update({
             where: { jobPostId },
