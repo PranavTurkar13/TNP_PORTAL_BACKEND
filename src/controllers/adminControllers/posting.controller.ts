@@ -15,12 +15,19 @@ export const getPostingDetails = async (req: Request, res: Response) => {
 
 export const addPostingDetails = async (req: Request, res: Response) => {
     try {
+        const auth0Id = req.auth?.payload.sub!;
+        const user = await db.user.findUnique({
+            where: { auth0Id },
+        });
+
+        if (user?.role !== "ADMIN" || "TNP_OFFICER") {
+            return res.status(403).json({ error: "Unauthorized" });
+        }
         const { role, company, companyInfo, description, ctc, deadline } = req.body;
         if (!role || !company || !description || !ctc || !deadline) {
             return res.status(400).json({ error: "All fields are required" });
         }
 
-        const auth0Id = req.auth?.payload.sub;
         if (!auth0Id) {
             return res
                 .status(401)
@@ -74,6 +81,14 @@ export const addPostingDetails = async (req: Request, res: Response) => {
 
 export const updatePostingDetails = async (req: Request, res: Response) => {
     try {
+        const auth0Id = req.auth?.payload.sub!;
+        const user = await db.user.findUnique({
+            where: { auth0Id },
+        });
+
+        if (user?.role !== "ADMIN" || "TNP_OFFICER") {
+            return res.status(403).json({ error: "Unauthorized" });
+        }
         const { id, role, company, companyInfo, description, ctc, deadline } = req.body;
         if (!id) {
             return res.status(400).json({ error: "Posting ID is required" });
