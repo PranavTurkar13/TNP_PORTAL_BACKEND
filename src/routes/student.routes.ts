@@ -7,6 +7,7 @@ import {
   getStudentProfile,
   registerStudentProfile,
   updateStudentProfile,
+  getFullStudentProfile,
 } from "../controllers/studentControllers/profile.controller.js";
 //Education Controller
 import {
@@ -63,6 +64,8 @@ studentRouter.use((req, res, next) => {
 studentRouter.get("/profile", getStudentProfile);
 studentRouter.post("/registerStudent", registerStudentProfile);
 studentRouter.put("/editProfile", updateStudentProfile);
+// Get full student profile with all details
+studentRouter.get("/profile/full", getFullStudentProfile);
 
 // Education routes
 studentRouter.get("/education", getEducationDetails);
