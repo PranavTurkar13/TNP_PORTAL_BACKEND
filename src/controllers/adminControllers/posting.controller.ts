@@ -19,8 +19,8 @@ export const addPostingDetails = async (req: Request, res: Response) => {
         const user = await db.user.findUnique({
             where: { auth0Id },
         });
-
-        if (user?.role !== "ADMIN" || "TNP_OFFICER") {
+        console.log(user?.role);
+        if (user?.role !== "ADMIN" && user?.role !== "TNP_OFFICER") {
             return res.status(403).json({ error: "Unauthorized" });
         }
         const { role, company, companyInfo, description, ctc, deadline } = req.body;
@@ -86,7 +86,7 @@ export const updatePostingDetails = async (req: Request, res: Response) => {
             where: { auth0Id },
         });
 
-        if (user?.role !== "ADMIN" || "TNP_OFFICER") {
+        if (user?.role !== "ADMIN" && user?.role !== "TNP_OFFICER") {
             return res.status(403).json({ error: "Unauthorized" });
         }
         const { id, role, company, companyInfo, description, ctc, deadline } = req.body;
