@@ -50,12 +50,33 @@ export const addEducationDetails = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Student profile not found" });
     }
 
+    const allowedBranches = [
+      "Mechanical",
+      "Electronics and Communication",
+      "Computer Science",
+      "Information Technology",
+      "AIDS",
+      "AIML",
+      "ECE",
+    ];
+
+    if (branch && !allowedBranches.includes(branch)) {
+      return res.status(400).json({ error: "Invalid branch" });
+    }
+
+    const hasDiploma =
+      diplomaYear !== null &&
+      diplomaYear !== undefined &&
+      Number(diplomaYear) > 0;
+
+    const duration = hasDiploma ? 3 : 4;
+
     const education = await db.education.upsert({
       where: { studentId: profile.id },
       update: {
         branch,
         enrollmentYear: Number(enrollmentYear),
-        passingYear: enrollmentYear + (diplomaYear ? 3 : 4),
+        passingYear: enrollmentYear + duration,
         cgpa: backlogs ? 0 : Number(cgpa),
         tenthPercent: tenthPercent ? Number(tenthPercent) : null,
         tenthYear: tenthYear ? Number(tenthYear) : null,
@@ -196,6 +217,27 @@ export const updateEducationDetails = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Education details not found" });
     }
 
+    const allowedBranches = [
+      "Mechanical",
+      "Electronics and Communication",
+      "Computer Science",
+      "Information Technology",
+      "AIDS",
+      "AIML",
+      "ECE",
+    ];
+
+    if (branch && !allowedBranches.includes(branch)) {
+      return res.status(400).json({ error: "Invalid branch" });
+    }
+
+    const hasDiploma =
+      diplomaYear !== null &&
+      diplomaYear !== undefined &&
+      Number(diplomaYear) > 0;
+
+    const duration = hasDiploma ? 3 : 4;
+
     // Update education details
     const updatedEducation = await db.education.update({
       where: { studentId: profile.id },
@@ -204,6 +246,9 @@ export const updateEducationDetails = async (req: Request, res: Response) => {
         enrollmentYear: enrollmentYear
           ? Number(enrollmentYear)
           : education.enrollmentYear,
+        passingYear:
+          (enrollmentYear ? Number(enrollmentYear) : education.enrollmentYear) +
+          duration,
         cgpa: cgpa !== undefined ? Number(cgpa) : education.cgpa,
         tenthPercent:
           tenthPercent !== undefined
