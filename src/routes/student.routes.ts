@@ -51,6 +51,7 @@ import {
   updateSocialsDetails,
   deleteSocialsDetails,
 } from "../controllers/studentControllers/social.controller.js";
+import { applyForJob } from "../controllers/studentControllers/application.controller.js";
 
 const studentRouter = express.Router();
 studentRouter.use(express.json());
@@ -104,6 +105,7 @@ studentRouter.put("/social/:socialsID", updateSocialsDetails);
 studentRouter.delete("/social/:socialsID", deleteSocialsDetails);
 
 // //APPLICATION ROUTE
+studentRouter.post("/applyForJob", applyForJob);
 // studentRouter.get("profile/applications", middleware, cont_func);
 
 export default studentRouter;

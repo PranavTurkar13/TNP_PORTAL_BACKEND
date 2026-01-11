@@ -8,7 +8,7 @@ export const addEligibilityCriteria = async (req: Request, res: Response) => {
             where: { auth0Id },
         });
 
-        if (user?.role !== "ADMIN" || "TNP_OFFICER") {
+        if (user?.role !== "ADMIN" && user?.role !== "TNP_OFFICER") {
             return res.status(403).json({ error: "Unauthorized" });
         }
         const { jobPostId, minCGPA, allowedBranches, maxBacklogs, minTenth, minTwelfth, minDiploma, passingYear } = req.body;
@@ -40,7 +40,7 @@ export const updateEligibilityCriteria = async (req: Request, res: Response) => 
             where: { auth0Id },
         });
 
-        if (user?.role !== "ADMIN" || "TNP_OFFICER") {
+        if (user?.role !== "ADMIN" && user?.role !== "TNP_OFFICER") {
             return res.status(403).json({ error: "Unauthorized" });
         }
         const { jobPostId, minCGPA, allowedBranches, maxBacklogs, minTenth, minTwelfth, minDiploma, passingYear } = req.body;
