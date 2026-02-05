@@ -11,6 +11,7 @@ import {
   updateEligibilityCriteria,
   getEligibilityCriteria,
 } from "../controllers/adminControllers/eligibility.controller.js";
+import { createJobWithEligibility } from "../controllers/adminControllers/posting_and_eligi.controller.js";
 
 const adminRouter = express.Router();
 adminRouter.use(express.json());
@@ -22,5 +23,7 @@ adminRouter.put("/editPostingDetails", updatePostingDetails);
 adminRouter.post("/addEligibilityCriteria", addEligibilityCriteria);
 adminRouter.put("/editEligibilityCriteria", updateEligibilityCriteria);
 adminRouter.get("/getEligibilityCriteria/:jobPostId", getEligibilityCriteria);
+
+adminRouter.post("/createJobWithEligibility", createJobWithEligibility);
 
 export default adminRouter;
