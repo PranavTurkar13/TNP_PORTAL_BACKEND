@@ -54,8 +54,10 @@ import {
 
 import {
   applyForJob,
-  getApplications
+  getApplications,
 } from "../controllers/studentControllers/application.controller.js";
+
+import { downloadResume } from "../controllers/studentControllers/resume.controller.js";
 
 const studentRouter = express.Router();
 studentRouter.use(express.json());
@@ -112,5 +114,7 @@ studentRouter.delete("/social/:socialsID", deleteSocialsDetails);
 studentRouter.post("/applyForJob", applyForJob);
 studentRouter.get("/applications", getApplications);
 // studentRouter.get("profile/applications", middleware, cont_func);
+
+studentRouter.get("/download-resume", downloadResume);
 
 export default studentRouter;
