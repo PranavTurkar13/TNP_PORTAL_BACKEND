@@ -12,9 +12,19 @@ import {
   getEligibilityCriteria,
 } from "../controllers/adminControllers/eligibility.controller.js";
 import { createJobWithEligibility } from "../controllers/adminControllers/posting_and_eligi.controller.js";
+import {
+  getAdminProfile,
+  upsertAdminProfile,
+} from "../controllers/adminControllers/profile.controller.js";
 
 const adminRouter = express.Router();
 adminRouter.use(express.json());
+
+//PROFILE
+adminRouter.get("/profile", getAdminProfile);
+adminRouter.post("/profile", upsertAdminProfile);
+adminRouter.put("/profile", upsertAdminProfile);
+
 //add status (like: active, inactive) to posting
 adminRouter.get("/postings", getPostingDetails);
 adminRouter.post("/addPostingDetails", addPostingDetails);
