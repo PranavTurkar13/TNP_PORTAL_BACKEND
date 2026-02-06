@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import {
   addPostingDetails,
-  getPostingDetails,
   updatePostingDetails,
 } from "../controllers/adminControllers/posting.controller.js";
 import {
@@ -26,7 +25,6 @@ adminRouter.post("/profile", upsertAdminProfile);
 adminRouter.put("/profile", upsertAdminProfile);
 
 //add status (like: active, inactive) to posting
-adminRouter.get("/postings", getPostingDetails);
 adminRouter.post("/addPostingDetails", addPostingDetails);
 adminRouter.put("/editPostingDetails", updatePostingDetails);
 

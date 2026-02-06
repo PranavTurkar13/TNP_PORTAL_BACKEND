@@ -7,6 +7,7 @@ import { auth } from "express-oauth2-jwt-bearer";
 import studentRouter from "./routes/student.routes.js";
 import adminRouter from "./routes/admin.routes.js";
 import userRouter from "./routes/user.routes.js";
+import postingRouter from "./routes/posting.routes.js";
 import { requireRole } from "./middleware/roleGuard.js";
 
 const app = express();
@@ -60,6 +61,7 @@ app.use(
   requireRole(["ADMIN", "TNP_OFFICER"]),
   adminRouter,
 );
+app.use("/api/v1/postings", checkJwt, postingRouter);
 
 app.get("/secure-route", checkJwt, (req, res) => {
   res.json({ message: "You are authenticated!", user: req.auth?.payload.sub });

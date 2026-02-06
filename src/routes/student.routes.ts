@@ -51,13 +51,15 @@ import {
   updateSocialsDetails,
   deleteSocialsDetails,
 } from "../controllers/studentControllers/social.controller.js";
-
+//Application Controller
 import {
   applyForJob,
   getApplications,
 } from "../controllers/studentControllers/application.controller.js";
-
+//Resume Controller
 import { downloadResume } from "../controllers/studentControllers/resume.controller.js";
+//Eligibility Controller
+import { getEligibilityCriteria } from "../controllers/studentControllers/eligibility.controller.js";
 
 const studentRouter = express.Router();
 studentRouter.use(express.json());
@@ -115,6 +117,10 @@ studentRouter.post("/applyForJob", applyForJob);
 studentRouter.get("/applications", getApplications);
 // studentRouter.get("profile/applications", middleware, cont_func);
 
+//ELIGIBILITY CRITERIA ROUTE
+studentRouter.get("/getEligibilityCriteria/:jobPostId", getEligibilityCriteria);
+
+//RESUME DOWNLOAD ROUTE
 studentRouter.get("/download-resume", downloadResume);
 
 export default studentRouter;
