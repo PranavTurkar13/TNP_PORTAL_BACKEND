@@ -7,6 +7,7 @@ import { auth } from "express-oauth2-jwt-bearer";
 import studentRouter from "./routes/student.routes.js";
 import adminRouter from "./routes/admin.routes.js";
 import userRouter from "./routes/user.routes.js";
+import { requireRole } from "./middleware/roleGuard.js";
 
 const app = express();
 
@@ -40,7 +41,7 @@ app.use(
       "Origin",
     ],
     optionsSuccessStatus: 204, // For legacy browsers
-  })
+  }),
 );
 
 // ---------------- Middleware ----------------
@@ -52,8 +53,13 @@ const checkJwt = auth({
 
 // ---------------- Routes ----------------
 app.use("/api/v1/user", userRouter);
-app.use("/api/v1/student", checkJwt, studentRouter);
-app.use("/api/v1/admin", checkJwt, adminRouter);
+app.use("/api/v1/student", checkJwt, requireRole(["STUDENT"]), studentRouter);
+app.use(
+  "/api/v1/admin",
+  checkJwt,
+  requireRole(["ADMIN", "TNP_OFFICER"]),
+  adminRouter,
+);
 
 app.get("/secure-route", checkJwt, (req, res) => {
   res.json({ message: "You are authenticated!", user: req.auth?.payload.sub });

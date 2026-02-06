@@ -57,6 +57,13 @@ export const upsertAdminProfile = async (req: Request, res: Response) => {
       },
     });
 
+    await db.user.update({
+      where: { id: user.id },
+      data: {
+        onboardingStep: "COMPLETED",
+      },
+    });
+
     res.json({ profile });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
