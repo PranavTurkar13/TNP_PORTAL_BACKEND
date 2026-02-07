@@ -152,9 +152,14 @@ model JobPost {
   ctc         String?
   deadline    DateTime
 
+  status JobStatus @default(DRAFT)
+
   postedBy     User                 @relation(fields: [postedById], references: [id])
   applications Application[]
   eligibility  EligibilityCriteria?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model EligibilityCriteria {
@@ -180,6 +185,13 @@ model Application {
 
   student StudentProfile @relation(fields: [studentId], references: [id])
   jobPost JobPost        @relation(fields: [jobPostId], references: [id])
+}
+
+enum JobStatus {
+  DRAFT
+  OPEN
+  CLOSED
+  ARCHIVED
 }
 
 enum ApplicationStatus {

@@ -43,6 +43,7 @@ export const createJobWithEligibility = async (req: Request, res: Response) => {
           description: job.description,
           ctc: String(job.ctc),
           deadline: new Date(job.deadline),
+          status: "DRAFT",
         },
       });
 

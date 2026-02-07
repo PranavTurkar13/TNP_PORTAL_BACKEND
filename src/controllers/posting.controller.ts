@@ -3,7 +3,10 @@ import db from "../client.js";
 
 export const getAllPostingDetails = async (req: Request, res: Response) => {
   try {
-    const postings = await db.jobPost.findMany();
+    const postings = await db.jobPost.findMany({
+      where: { status: "OPEN" },
+      orderBy: { createdAt: "desc" },
+    });
     return res.status(200).json({ postings });
   } catch (error: any) {
     console.error("Error getting postings:", error);
