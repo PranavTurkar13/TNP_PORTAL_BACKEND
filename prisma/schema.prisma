@@ -18,7 +18,9 @@ model User {
   updatedAt      DateTime       @updatedAt
 
   // Relations
-  student  StudentProfile?
+  student      StudentProfile?
+  adminProfile AdminProfile?
+
   jobPosts JobPost[]
 }
 
@@ -50,6 +52,21 @@ model StudentProfile {
   achievements   Achievement[]
   createdAt      DateTime             @default(now())
   updatedAt      DateTime             @updatedAt
+}
+
+model AdminProfile {
+  id     String @id @default(uuid())
+  userId String @unique
+
+  fullName     String
+  phoneNo      String?
+  organization String  @default("PES Modern College of Engineering")
+  designation  String
+
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Education {
@@ -135,9 +152,14 @@ model JobPost {
   ctc         String?
   deadline    DateTime
 
+  status JobStatus @default(DRAFT)
+
   postedBy     User                 @relation(fields: [postedById], references: [id])
   applications Application[]
   eligibility  EligibilityCriteria?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model EligibilityCriteria {
@@ -163,6 +185,13 @@ model Application {
 
   student StudentProfile @relation(fields: [studentId], references: [id])
   jobPost JobPost        @relation(fields: [jobPostId], references: [id])
+}
+
+enum JobStatus {
+  DRAFT
+  OPEN
+  CLOSED
+  ARCHIVED
 }
 
 enum ApplicationStatus {
