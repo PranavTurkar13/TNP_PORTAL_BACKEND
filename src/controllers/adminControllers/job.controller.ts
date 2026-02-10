@@ -49,6 +49,11 @@ export const getJobByIdForAdmin = async (req: Request, res: Response) => {
 
     const appliedCount = job.applications.length;
 
+    const appliedStudentIds = new Set(job.applications.map((a) => a.studentId));
+    const eligibleNotAppliedCount = eligibleStudents.filter(
+      (s) => !appliedStudentIds.has(s.id),
+    ).length;
+
     res.json({
       job,
       stats: {
@@ -58,6 +63,7 @@ export const getJobByIdForAdmin = async (req: Request, res: Response) => {
           .length,
         selected: job.applications.filter((a) => a.status === "SELECTED")
           .length,
+        eligibleNotApplied: eligibleNotAppliedCount,
       },
     });
   } catch (err: any) {
