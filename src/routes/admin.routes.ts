@@ -29,6 +29,9 @@ import {
 //Application Controllers
 import { getApplicationsForJob } from "../controllers/adminControllers/application.controller.js";
 import { bulkUpdateApplicationStatus } from "../controllers/adminControllers/applicationStatus.controller.js";
+//Excel Download Controller
+import { exportApplicationsCSV } from "../controllers/adminControllers/applicantsExcelDownload.controller.js";
+
 const adminRouter = express.Router();
 adminRouter.use(express.json());
 
@@ -54,5 +57,7 @@ adminRouter.patch("/job/status", updateJobStatus);
 
 adminRouter.get("/jobs/:jobId/applications", getApplicationsForJob);
 adminRouter.patch("/applications/status", bulkUpdateApplicationStatus);
+
+adminRouter.get("/jobs/:jobId/applications/download", exportApplicationsCSV);
 
 export default adminRouter;
