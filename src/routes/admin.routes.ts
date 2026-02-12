@@ -25,6 +25,7 @@ import { updateJobStatus } from "../controllers/adminControllers/jobStatus.contr
 import {
   getAllJobsForAdmin,
   getJobByIdForAdmin,
+  notifyEligibleNotApplied,
 } from "../controllers/adminControllers/job.controller.js";
 //Application Controllers
 import { getApplicationsForJob } from "../controllers/adminControllers/application.controller.js";
@@ -52,6 +53,8 @@ adminRouter.post("/createJobWithEligibility", createJobWithEligibility);
 
 adminRouter.get("/jobs", getAllJobsForAdmin);
 adminRouter.get("/jobs/:jobId", getJobByIdForAdmin);
+
+adminRouter.post("/jobs/:jobId/notify", notifyEligibleNotApplied);
 
 adminRouter.patch("/job/status", updateJobStatus);
 
