@@ -60,7 +60,7 @@ import {
 import { downloadResume } from "../controllers/studentControllers/resume.controller.js";
 //Eligibility Controller
 import { getEligibilityCriteria } from "../controllers/studentControllers/eligibility.controller.js";
-import { getPublicProfile } from "../controllers/studentControllers/publicprofile.controller.js";
+import { getPublicProfile, searchStudents } from "../controllers/studentControllers/publicprofile.controller.js";
 
 const studentRouter = express.Router();
 studentRouter.use(express.json());
@@ -124,6 +124,7 @@ studentRouter.get("/getEligibilityCriteria/:jobPostId", getEligibilityCriteria);
 //RESUME DOWNLOAD ROUTE
 studentRouter.get("/download-resume", downloadResume);
 
+studentRouter.get("/search", searchStudents);
 studentRouter.get("/publicProfile/:userId", getPublicProfile);
 
 export default studentRouter;
