@@ -28,8 +28,9 @@
     "jsonwebtoken": "^9.0.2",
     "jwks-rsa": "^3.2.0",
     "pg": "^8.16.3",
-    "resend": "^6.9.1",
-    "typescript": "^5.9.2"
+    "resend": "^6.9.2",
+    "typescript": "^5.9.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",

@@ -25,10 +25,14 @@ import { updateJobStatus } from "../controllers/adminControllers/jobStatus.contr
 import {
   getAllJobsForAdmin,
   getJobByIdForAdmin,
+  notifyEligibleNotApplied,
 } from "../controllers/adminControllers/job.controller.js";
 //Application Controllers
 import { getApplicationsForJob } from "../controllers/adminControllers/application.controller.js";
 import { bulkUpdateApplicationStatus } from "../controllers/adminControllers/applicationStatus.controller.js";
+//Excel Download Controller
+import { exportApplicationsCSV } from "../controllers/adminControllers/applicantsExcelDownload.controller.js";
+
 const adminRouter = express.Router();
 adminRouter.use(express.json());
 
@@ -50,9 +54,13 @@ adminRouter.post("/createJobWithEligibility", createJobWithEligibility);
 adminRouter.get("/jobs", getAllJobsForAdmin);
 adminRouter.get("/jobs/:jobId", getJobByIdForAdmin);
 
+adminRouter.post("/jobs/:jobId/notify", notifyEligibleNotApplied);
+
 adminRouter.patch("/job/status", updateJobStatus);
 
 adminRouter.get("/jobs/:jobId/applications", getApplicationsForJob);
 adminRouter.patch("/applications/status", bulkUpdateApplicationStatus);
+
+adminRouter.get("/jobs/:jobId/applications/download", exportApplicationsCSV);
 
 export default adminRouter;
