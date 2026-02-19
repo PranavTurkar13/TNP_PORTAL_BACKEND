@@ -24,12 +24,6 @@ model User {
   jobPosts JobPost[]
 }
 
-enum Role {
-  ADMIN
-  STUDENT
-  TNP_OFFICER
-}
-
 model StudentProfile {
   id            String    @id @default(uuid())
   userId        String    @unique
@@ -42,16 +36,17 @@ model StudentProfile {
   skills        String[] // list of skills
 
   // Relations
-  user           User                 @relation(fields: [userId], references: [id])
-  education      Education?
-  projects       Project[]
-  internships    Internship[]
-  certifications Certification[]
-  socials        SocialMediaProfile[]
-  applications   Application[]
-  achievements   Achievement[]
-  createdAt      DateTime             @default(now())
-  updatedAt      DateTime             @updatedAt
+  user                 User                  @relation(fields: [userId], references: [id])
+  education            Education?
+  projects             Project[]
+  internships          Internship[]
+  certifications       Certification[]
+  socials              SocialMediaProfile[]
+  applications         Application[]
+  achievements         Achievement[]
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  interviewExperiences InterviewExperience[]
 }
 
 model AdminProfile {
@@ -185,6 +180,26 @@ model Application {
 
   student StudentProfile @relation(fields: [studentId], references: [id])
   jobPost JobPost        @relation(fields: [jobPostId], references: [id])
+}
+
+model InterviewExperience {
+  id         String @id @default(cuid())
+  authorId   String
+  title      String
+  company    String
+  role       String
+  difficulty String
+  content    String
+
+  author StudentProfile @relation(fields: [authorId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  ADMIN
+  STUDENT
+  TNP_OFFICER
 }
 
 enum JobStatus {

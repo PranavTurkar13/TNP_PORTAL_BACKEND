@@ -33,7 +33,7 @@ export const createJobWithEligibility = async (req: Request, res: Response) => {
     }
 
     const result = await db.$transaction(async (tx) => {
-      // 1️⃣ Create Job Post
+      // Create Job Post
       const jobPost = await tx.jobPost.create({
         data: {
           postedById: user.id,
@@ -47,7 +47,7 @@ export const createJobWithEligibility = async (req: Request, res: Response) => {
         },
       });
 
-      // 2️⃣ Create Eligibility Criteria
+      //Create Eligibility Criteria
       const eligibilityCriteria = await tx.eligibilityCriteria.create({
         data: {
           jobPostId: jobPost.id,
